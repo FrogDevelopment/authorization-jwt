@@ -1,0 +1,6 @@
+### MVN ###
+/target/
+
+### IntelliJ IDEA ###
+.idea
+

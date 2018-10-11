@@ -1,0 +1,9 @@
+security:
+  jwt:
+    token:
+      # fixme create a real secret-key (store on a config-server)
+      secret-key: 'secret-key'
+      header: 'Authorization'
+      prefix: 'Bearer '
+      # in milliseconds (24*60*60*1000 => 1j)
+      expiration: 86400000
