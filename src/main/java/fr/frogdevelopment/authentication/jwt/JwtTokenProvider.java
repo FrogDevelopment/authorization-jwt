@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
 
-    private static final String CLAIM_NAME = "authorities";
+    static final String CLAIM_NAME = "authorities";
 
     private final JwtProperties jwtProperties;
 
@@ -60,7 +60,7 @@ public class JwtTokenProvider {
         return token.replace(jwtProperties.getPrefix(), "");
     }
 
-    private Claims resolveClaims(@NotNull String token) {
+    Claims resolveClaims(@NotNull String token) {
         try {
             return Jwts.parser()
                     .setSigningKey(jwtProperties.getSecretKey())
