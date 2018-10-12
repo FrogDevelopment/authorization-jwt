@@ -1,6 +1,3 @@
-### MVN ###
 /target/
-
-### IntelliJ IDEA ###
 .idea
-
+*.iml
