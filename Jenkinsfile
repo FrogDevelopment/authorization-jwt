@@ -18,7 +18,7 @@ pipeline {
                         maven: 'Default',
                         jdk: 'Java 10'
                 ) {
-                    sh "mvn surefire:test -e -B"
+                    sh "mvn test -e -B"
                     step( [ $class: 'JacocoPublisher' ] )
                 }
             }
