@@ -8,7 +8,10 @@ class TestConfig {
 
     @Bean
     public JwtProperties jwtProperties() {
-        return new JwtProperties("secret-key");
+        JwtProperties jwtProperties = new JwtProperties();
+        jwtProperties.setSecretKey("secret-key");
+
+        return jwtProperties;
     }
 
     @Bean
