@@ -2,6 +2,7 @@ package fr.frogdevelopment.authentication.jwt;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -12,10 +13,11 @@ import java.util.Base64;
 @ConfigurationProperties("security.jwt.token")
 public class JwtProperties {
 
+    @NonNull
     private String secretKey;
-    private String header;
-    private String prefix;
-    private long expiration;
+    private String header = "Authorization";
+    private String prefix = "Bearer ";
+    private long expiration = 60000;
 
     @PostConstruct
     void init() {
