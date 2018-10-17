@@ -49,7 +49,7 @@ pipeline {
                         maven: 'Default',
                         jdk: 'Java 10'
                 ) {
-                    sh "mvn install -e -B"
+                    sh "mvn install -Dmaven.test.skip=true -e -B"
                 }
             }
         }
