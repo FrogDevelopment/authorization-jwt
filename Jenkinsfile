@@ -2,13 +2,23 @@ pipeline {
     agent any
 
     stages {
+        stage('Clean') {
+            steps {
+                withMaven(
+                        maven: 'Default',
+                        jdk: 'Java 10'
+                ) {
+                    sh "mvn clean -e -B"
+                }
+            }
+        }
         stage('Compile') {
             steps {
                 withMaven(
                         maven: 'Default',
                         jdk: 'Java 10'
                 ) {
-                    sh "mvn clean compile -e -B"
+                    sh "mvn compile -e -B"
                 }
             }
         }
@@ -23,15 +33,15 @@ pipeline {
                 }
             }
         }
-        stage('Verify') {
-            steps {
-                withMaven(
-                        maven: 'Default',
-                        jdk: 'Java 10'
-                ) {
-                    sh "mvn failsafe:verify -e -B"
-                }
-            }
-        }
+//        stage('Verify') {
+//            steps {
+//                withMaven(
+//                        maven: 'Default',
+//                        jdk: 'Java 10'
+//                ) {
+//                    sh "mvn verify -e -B"
+//                }
+//            }
+//        }
     }
 }
