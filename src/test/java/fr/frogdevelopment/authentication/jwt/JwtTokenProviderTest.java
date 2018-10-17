@@ -101,7 +101,6 @@ class JwtTokenProviderTest {
         // given
         String token = "BAD TOKEN";
 
-
         // when
         assertThrows(BadCredentialsException.class, () -> jwtTokenProvider.resolveClaims(token));
     }
@@ -111,7 +110,6 @@ class JwtTokenProviderTest {
         // given
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(jwtProperties.getHeader(), "BAD TOKEN");
-
 
         // when
         String resolvedName = jwtTokenProvider.resolveName(request);
@@ -131,7 +129,6 @@ class JwtTokenProviderTest {
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(jwtProperties.getHeader(), jwtProperties.getPrefix() + token);
-
 
         // when
         String resolvedName = jwtTokenProvider.resolveName(request);
@@ -153,7 +150,6 @@ class JwtTokenProviderTest {
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(jwtProperties.getHeader(), jwtProperties.getPrefix() + token);
-
 
         // when
         var authentication = jwtTokenProvider.createAuthentication(token);
