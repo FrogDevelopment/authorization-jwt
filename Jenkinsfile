@@ -43,5 +43,15 @@ pipeline {
 //                }
 //            }
 //        }
+        stage('Install') {
+            steps {
+                withMaven(
+                        maven: 'Default',
+                        jdk: 'Java 10'
+                ) {
+                    sh "mvn install -e -B"
+                }
+            }
+        }
     }
 }
