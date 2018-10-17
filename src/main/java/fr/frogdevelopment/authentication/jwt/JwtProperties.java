@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.security.InvalidParameterException;
 import java.util.Base64;
 
 @Data
@@ -19,6 +20,9 @@ public class JwtProperties {
 
     @PostConstruct
     void init() {
+        if (secretKey == null) {
+            throw new InvalidParameterException("security.jwt.token.secret-key required !!");
+        }
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 }
