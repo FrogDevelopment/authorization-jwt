@@ -9,6 +9,7 @@ pipeline {
                         jdk: 'Java 10'
                 ) {
                     sh "echo $JAVA_HOME"
+                    sh java -version
                 }
             }
         }
