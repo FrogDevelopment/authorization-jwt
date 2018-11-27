@@ -6,7 +6,7 @@ pipeline {
             steps {
                 withMaven(
                         maven: 'Default',
-                        jdk: 'Java 10'
+                        jdk: 'Default'
                 ) {
                     sh "echo $JAVA_HOME"
                     sh "java -version"
@@ -17,7 +17,7 @@ pipeline {
             steps {
                 withMaven(
                         maven: 'Default',
-                        jdk: 'Java 10'
+                        jdk: 'Default'
                 ) {
                     sh "mvn clean -e -B"
                 }
@@ -27,7 +27,7 @@ pipeline {
             steps {
                 withMaven(
                         maven: 'Default',
-                        jdk: 'Java 10'
+                        jdk: 'Default'
                 ) {
                     sh "mvn compile -e -B"
                 }
@@ -37,7 +37,7 @@ pipeline {
             steps {
                 withMaven(
                         maven: 'Default',
-                        jdk: 'Java 10'
+                        jdk: 'Default'
                 ) {
                     sh "mvn test -e -B"
                     step( [ $class: 'JacocoPublisher' ] )
@@ -48,7 +48,7 @@ pipeline {
 //            steps {
 //                withMaven(
 //                        maven: 'Default',
-//                        jdk: 'Java 10'
+//                        jdk: 'Default'
 //                ) {
 //                    sh "mvn verify -e -B"
 //                }
@@ -58,7 +58,7 @@ pipeline {
             steps {
                 withMaven(
                         maven: 'Default',
-                        jdk: 'Java 10'
+                        jdk: 'Default'
                 ) {
                     sh "mvn install -Dmaven.test.skip=true -e -B"
                 }
