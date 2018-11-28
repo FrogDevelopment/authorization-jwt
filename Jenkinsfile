@@ -35,8 +35,8 @@ pipeline {
 //            }
 //        }
         stage('Install') {
-            withMaven(maven: 'Default',jdk: 'Java 10') {
-                steps {
+            steps {
+                withMaven(maven: 'Default',jdk: 'Java 10') {
                     sh "mvn install -Dmaven.test.skip=true -e -B"
                 }
             }
