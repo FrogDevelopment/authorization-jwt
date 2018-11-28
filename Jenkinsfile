@@ -2,8 +2,8 @@ pipeline {
     agent any
     
     tools {
-        maven: 'Default',
-        jdk: 'Java 10'
+        maven 'Default',
+        jdk 'Java 10'
     }
 
     stages {
