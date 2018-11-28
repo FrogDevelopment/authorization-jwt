@@ -2,21 +2,12 @@ pipeline {
     agent any
 
     stages {
-        stage('TMP') {
-            steps {
-                withMaven(
-                        maven: 'Default',
-                        jdk: 'Default'
-                ) {
-                    sh "echo $JAVA_HOME"
-                }
-            }
-        }
         stage('Clean') {
             steps {
                 withMaven(
                         maven: 'Default',
                         jdk: 'Default'
+                        env.JAVA_HOME = tool 'Java 10'
                 ) {
                     sh "mvn clean -e -B"
                 }
