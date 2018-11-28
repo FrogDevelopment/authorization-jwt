@@ -9,7 +9,6 @@ pipeline {
                         jdk: 'Default'
                 ) {
                     sh "echo $JAVA_HOME"
-                    sh "java -version"
                 }
             }
         }
