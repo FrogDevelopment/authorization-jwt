@@ -15,24 +15,18 @@ pipeline {
     stages {
         stage('Clean') {
             steps {
-                withMaven {
-                    sh "mvn clean -e -B"
-                }
+                sh "mvn clean -e -B"
             }
         }
         stage('Compile') {
             steps {
-                withMaven {
-                    sh "mvn compile -e -B"
-                }
+                sh "mvn compile -e -B"
             }
         }
         stage('Test') {
             steps {
-                withMaven {
-                    sh "mvn test -e -B"
-                    step( [ $class: 'JacocoPublisher' ] )
-                }
+                sh "mvn test -e -B"
+                step( [ $class: 'JacocoPublisher' ] )
             }
         }
 //        stage('Verify') {
@@ -47,9 +41,7 @@ pipeline {
 //        }
         stage('Install') {
             steps {
-                withMaven {
-                    sh "mvn install -Dmaven.test.skip=true -e -B"
-                }
+                sh "mvn install -Dmaven.test.skip=true -e -B"
             }
         }
     }
