@@ -6,8 +6,7 @@ pipeline {
             steps {
                 withMaven(
                         maven: 'Default',
-                        jdk: 'Default',
-                        env.JAVA_HOME : tool 'Java 10'
+                        jdk: 'Default'
                 ) {
                     sh "mvn clean -e -B"
                 }
