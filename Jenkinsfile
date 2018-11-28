@@ -1,6 +1,17 @@
 pipeline {
     agent any
     
+    post {
+        always {
+            deleteDir()
+        }
+    }
+    
+    tools {
+        maven 'Default'
+        jdk 'Java 10'
+    }
+    
     stages {
         stage('Clean') {
             steps {
