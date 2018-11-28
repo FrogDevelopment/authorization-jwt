@@ -1,33 +1,29 @@
 pipeline {
     agent any
+    
+    tools {
+        maven: 'Default',
+        jdk: 'Java 10'
+    }
 
     stages {
         stage('Clean') {
             steps {
-                withMaven(
-                        maven: 'Default',
-                        jdk: 'Java 10'
-                ) {
+                withMaven {
                     sh "mvn clean -e -B"
                 }
             }
         }
         stage('Compile') {
             steps {
-                withMaven(
-                        maven: 'Default',
-                        jdk: 'Java 10'
-                ) {
+                withMaven {
                     sh "mvn compile -e -B"
                 }
             }
         }
         stage('Test') {
             steps {
-                withMaven(
-                        maven: 'Default',
-                        jdk: 'Java 10'
-                ) {
+                withMaven {
                     sh "mvn test -e -B"
                     step( [ $class: 'JacocoPublisher' ] )
                 }
@@ -45,10 +41,7 @@ pipeline {
 //        }
         stage('Install') {
             steps {
-                withMaven(
-                        maven: 'Default',
-                        jdk: 'Java 10'
-                ) {
+                withMaven {
                     sh "mvn install -Dmaven.test.skip=true -e -B"
                 }
             }
