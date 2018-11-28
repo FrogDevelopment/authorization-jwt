@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clean') {
             steps {
-                withMaven(maven: 'Default',jdk: 'Java 10') {
+                withMaven(jdk: 'Java 10',maven: 'Default') {
                     sh "echo JAVA_HOME=$JAVA_HOME"
                     sh "mvn clean -B -V"
                 }
