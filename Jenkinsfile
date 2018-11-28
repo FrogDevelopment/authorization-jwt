@@ -1,24 +1,13 @@
 pipeline {
     agent any
     
-    post {
-        always {
-            deleteDir()
-        }
-    }
-    
-    tools {
-        maven 'Default'
-        jdk 'Java 10'
-    }
-    
     stages {
         stage('Clean') {
             steps {
                 withEnv(["JAVA_HOME=${tool 'Java 10'}",
                          "PATH+MAVEN=${tool 'Default'}/bin:${env.JAVA_HOME}/bin"]
                        ) {
-                    sh "mvn clean -e -B"
+                    sh "mvn clean -B -V"
                 }
             }
         }
@@ -29,7 +18,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh "mvn test -e -B"
+                sh "mvn test -e -B -Dsurefire.useFile=false"
                 step( [ $class: 'JacocoPublisher' ] )
             }
         }
