@@ -15,7 +15,11 @@ pipeline {
     stages {
         stage('Clean') {
             steps {
-                sh "mvn clean -e -B"
+                withEnv(["JAVA_HOME=${tool 'Java 10'}",
+                         "PATH+MAVEN=${tool 'Default'}/bin:${env.JAVA_HOME}/bin"]
+                       ) {
+                    sh "mvn clean -e -B"
+                }
             }
         }
         stage('Compile') {
