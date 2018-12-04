@@ -1,31 +1,34 @@
-node {
-    env.JAVA_HOME="${tool 'Java 10'}"
-    env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
-    sh 'java -version'
+pipeline {
+    agent any
 
-    stage('Clean') {
-        steps {
-            withMaven(jdk: 'Java 10',maven: 'Default') {
-                sh "echo JAVA_HOME=$JAVA_HOME"
-                sh "mvn clean -B -V"
+    environment {
+        JAVA_HOME = "JAVA_HOME=/var/jenkins_home/tools/hudson.model.JDK/Java_10/jdk-10.0.2/bin:$PATH"
+      }
+
+    stages {
+        stage('Clean') {
+            steps {
+                withMaven(jdk: 'Java 10',maven: 'Default') {
+                    sh "echo JAVA_HOME=$JAVA_HOME"
+                    sh "mvn clean -B -V"
+                }
             }
         }
-    }
-    stage('Compile') {
-        steps {
+        stage('Compile') {
+            steps {
+                    withMaven(maven: 'Default',jdk: 'Java 10') {
+                    sh "mvn compile -e -B"
+                }
+            }
+        }
+        stage('Test') {
+            steps {
                 withMaven(maven: 'Default',jdk: 'Java 10') {
-                sh "mvn compile -e -B"
+                    sh "mvn test -e -B -Dsurefire.useFile=false"
+                    step( [ $class: 'JacocoPublisher' ] )
+                }
             }
         }
-    }
-    stage('Test') {
-        steps {
-            withMaven(maven: 'Default',jdk: 'Java 10') {
-                sh "mvn test -e -B -Dsurefire.useFile=false"
-                step( [ $class: 'JacocoPublisher' ] )
-            }
-        }
-    }
 //        stage('Verify') {
 //            steps {
 //                withMaven(
@@ -36,10 +39,11 @@ node {
 //                }
 //            }
 //        }
-    stage('Install') {
-        steps {
-            withMaven(maven: 'Default',jdk: 'Java 10') {
-                sh "mvn install -Dmaven.test.skip=true -e -B"
+        stage('Install') {
+            steps {
+                withMaven(maven: 'Default',jdk: 'Java 10') {
+                    sh "mvn install -Dmaven.test.skip=true -e -B"
+                }
             }
         }
     }
