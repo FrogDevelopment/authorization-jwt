@@ -6,7 +6,7 @@ pipeline {
             steps {
                     withMaven(jdk: 'Java 10',maven: 'Default') {
                         sh "echo JAVA_HOME=$JAVA_HOME"
-                        withEnv(['JAVA_HOME=/var/jenkins_home/tools/hudson.model.JDK/Java_10/jdk-10.0.2']) {
+                        withEnv(['JAVA_HOME=$JAVA_HOME/jdk-10.0.2']) {
                             sh "echo JAVA_HOME=$JAVA_HOME"
                             sh "mvn clean -B -V"
                     }
