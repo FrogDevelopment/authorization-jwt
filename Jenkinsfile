@@ -1,12 +1,11 @@
 pipeline {
     agent any
 
-    environment {
-        JAVA_HOME = "JAVA_HOME=/var/jenkins_home/tools/hudson.model.JDK/Java_10/jdk-10.0.2/bin:$PATH"
-      }
-
     stages {
         stage('Clean') {
+        environment {
+                JAVA_HOME = "JAVA_HOME=/var/jenkins_home/tools/hudson.model.JDK/Java_10/jdk-10.0.2/bin:$PATH"
+            }
             steps {
                 withMaven(jdk: 'Java 10',maven: 'Default') {
                     sh "echo JAVA_HOME=$JAVA_HOME"
