@@ -4,12 +4,9 @@ pipeline {
     stages {
         stage('Clean') {
             steps {
-                    withMaven(jdk: 'Java 10',maven: 'Default') {
-                        sh "echo JAVA_HOME=$JAVA_HOME"
-                        withEnv(['JAVA_HOME=$JAVA_HOME/jdk-10.0.2']) {
-                            sh "echo JAVA_HOME=$JAVA_HOME"
-                            sh "mvn clean -B -V"
-                    }
+                  withMaven(jdk: 'Java 10',maven: 'Default') {
+                    sh "echo JAVA_HOME=$JAVA_HOME"
+                    sh "mvn clean -B -V"
                 }
             }
         }
