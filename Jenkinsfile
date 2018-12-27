@@ -1,48 +1,33 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Compile') {
-            steps {
-                withMaven(
-                        maven: 'Default',
-                        jdk: 'Default'
-                ) {
+    withMaven(
+            maven: 'Default',
+            jdk: 'Default'
+    ) {
+
+        stages {
+            stage('Compile') {
+                steps {
                     sh "mvn compile -e "
                 }
             }
-        }
 
-        stage('Test') {
-            steps {
-                withMaven(
-                        maven: 'Default',
-                        jdk: 'Default'
-                ) {
+            stage('Test') {
+                steps {
                     sh "mvn test -e  -Dsurefire.useFile=false"
                 }
             }
-        }
 
-        stage('Install') {
-            steps {
-                withMaven(
-                        maven: 'Default',
-                        jdk: 'Default'
-                ) {
+            stage('Install') {
+                steps {
                     sh "mvn install -Dmaven.test.skip=true -e "
                 }
             }
-        }
 
-        stage('Publish') {
-            steps {
-                withMaven(
-                        maven: 'Default',
-                        jdk: 'Default'
-                ) {
-                   // sh "mvn install -Dmaven.test.skip=true -e "
-                   // sh "echo FIXME"
+            stage('Publish') {
+                steps {
+                 // sh "mvn install -Dmaven.test.skip=true -e "
                 }
             }
         }
