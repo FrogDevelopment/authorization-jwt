@@ -1,12 +1,12 @@
 pipeline {
     agent any
 
-    withMaven(
-            maven: 'Default',
-            jdk: 'Default'
-    ) {
+    stages {
+        withMaven(
+                maven: 'Default',
+                jdk: 'Default'
+        ) {
 
-        stages {
             stage('Compile') {
                 steps {
                     sh "mvn compile -e "
