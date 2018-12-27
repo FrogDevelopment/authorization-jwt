@@ -14,7 +14,6 @@ pipeline {
             steps {
                 withMaven(maven: 'Default',jdk: 'Java 10') {
                     sh "mvn test -e  -Dsurefire.useFile=false"
-                    step( [ $class: 'JacocoPublisher' ] )
                 }
             }
         }
