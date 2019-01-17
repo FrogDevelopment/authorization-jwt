@@ -35,14 +35,18 @@ pipeline {
             }
         }
 
-        stage('Publish') {
+        stage('Analyse') {
             steps {
                 withMaven(
                         maven: 'Default',
                         jdk: 'Default'
                 ) {
-                   // sh "mvn install -Dmaven.test.skip=true -e "
-                   // sh "echo FIXME"
+                    sh "mvn sonar:sonar \
+                          -Dsonar.projectKey=FrogDevelopment_jwt-authentication \
+                          -Dsonar.organization=frogdevelopment \
+                          -Dsonar.host.url=https://sonarcloud.io \
+                          -Dsonar.login=aae668311f337077578b3986eef0b70203db09f4 \
+                          -e "
                 }
             }
         }
