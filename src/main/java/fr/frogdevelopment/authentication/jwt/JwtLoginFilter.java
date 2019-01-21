@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -16,7 +18,12 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     public JwtLoginFilter(AuthenticationManager authenticationManager,
                           JwtTokenProvider jwtTokenProvider) {
         setAuthenticationManager(authenticationManager);
-        setAuthenticationSuccessHandler((request, response, authentication) -> {
+        setAuthenticationSuccessHandler(getAuthenticationSuccessHandler(jwtTokenProvider));
+    }
+
+    @NotNull
+    private AuthenticationSuccessHandler getAuthenticationSuccessHandler(JwtTokenProvider jwtTokenProvider) {
+        return (request, response, authentication) -> {
             var token = jwtTokenProvider.createToken(authentication);
 
             // send token as response
@@ -29,6 +36,6 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
                 log.error("Error while writing authentication token to response", e);
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
-        });
+        };
     }
 }
