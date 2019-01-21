@@ -24,17 +24,6 @@ pipeline {
             }
         }
 
-        stage('Install') {
-            steps {
-                withMaven(
-                        maven: 'Default',
-                        jdk: 'Default'
-                ) {
-                    sh "mvn install -Dmaven.test.skip=true -e "
-                }
-            }
-        }
-
         stage('Analyse') {
             steps {
                 withMaven(
@@ -47,6 +36,17 @@ pipeline {
                           -Dsonar.host.url=https://sonarcloud.io \
                           -Dsonar.login=aae668311f337077578b3986eef0b70203db09f4 \
                           -e "
+                }
+            }
+        }
+
+        stage('Install') {
+            steps {
+                withMaven(
+                        maven: 'Default',
+                        jdk: 'Default'
+                ) {
+                    sh "mvn install -Dmaven.test.skip=true -e "
                 }
             }
         }
