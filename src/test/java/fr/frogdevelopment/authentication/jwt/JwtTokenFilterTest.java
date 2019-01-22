@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import io.jsonwebtoken.JwtException;
 import javax.servlet.http.HttpServletRequest;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("Spring boot 2 mockito2 Junit5 example")
 class JwtTokenFilterTest {
 
     @InjectMocks
