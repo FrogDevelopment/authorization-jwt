@@ -1,5 +1,6 @@
 package fr.frogdevelopment.authentication.jwt;
 
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,7 +26,8 @@ public abstract class JwtSecurityConfigurerAdapter extends WebSecurityConfigurer
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // handle an unauthorized attempts
-//        http.exceptionHandling().authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+        http.exceptionHandling()
+                .authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED));
 
         // Apply JWT
         http.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), LogoutFilter.class);
