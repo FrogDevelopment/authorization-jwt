@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -26,11 +28,18 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
         log.info("Authentication success => write token on body");
         try (PrintWriter writer = httpServletResponse.getWriter()) {
             writer.write("{\"token\":\"" + token + "\"}");
+            httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
             httpServletResponse.setStatus(HttpServletResponse.SC_OK);
             httpServletResponse.flushBuffer();
         } catch (IOException e) {
             log.error("Error while writing authentication token to response", e);
             httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            // fixme
+            try {
+                httpServletResponse.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(), "fixme Error");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 }

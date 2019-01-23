@@ -1,0 +1,11 @@
+spring:
+  main:
+    banner-mode: 'off'
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: "jdbc:sqlite::memory:"
+
+security:
+  jwt:
+    token:
+      secret-key: "secret-key"

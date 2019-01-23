@@ -1,15 +1,16 @@
 package fr.frogdevelopment.authentication.jwt;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 import java.security.InvalidParameterException;
 import java.util.Base64;
+import javax.annotation.PostConstruct;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 @Data
 @Component
+@Configuration
 @ConfigurationProperties("security.jwt.token")
 public class JwtProperties {
 
