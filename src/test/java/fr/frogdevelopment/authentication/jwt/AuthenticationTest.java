@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import fr.frogdevelopment.authentication.jwt.conf.JwtApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,33 +22,35 @@ import org.springframework.test.web.servlet.ResultActions;
 @SpringJUnitConfig(JwtApplication.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-class UserControllerTest {
+class AuthenticationTest {
 
-    private static final String URL_TEMPLATE = "/login";
+    private static final String URL_LOGIN = "/login";
+    private static final String URL_LOGOUT = "/logout";
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    void shouldRefuseEmptyLoginWith401() throws Exception {
+    void shouldReturn401WhenLoginWithBadCredentials() throws Exception {
         // given
         // when
         ResultActions perform = this.mockMvc.perform(
-                post(URL_TEMPLATE)
+                post(URL_LOGIN)
+                        .param(SPRING_SECURITY_FORM_USERNAME_KEY, "user")
+                        .param(SPRING_SECURITY_FORM_PASSWORD_KEY, "bla bla bla")
                         .accept(MediaType.APPLICATION_JSON));
 
         // then
         perform
                 .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$").doesNotExist())
-                .andExpect(content().bytes(new byte[0]));
+                .andExpect(jsonPath("$").doesNotExist());
     }
 
     @Test
-    void shouldAcceptLoginAndReturnTheToken() throws Exception {
+    void shouldReturn200WithTokenWhenLoginWithGoodCredentials() throws Exception {
         // when
         ResultActions perform = mockMvc.perform(
-                post(URL_TEMPLATE)
+                post(URL_LOGIN)
                         .param(SPRING_SECURITY_FORM_USERNAME_KEY, "admin")
                         .param(SPRING_SECURITY_FORM_PASSWORD_KEY, "security_is_fun")
                         .accept(MediaType.APPLICATION_JSON));
@@ -58,5 +61,20 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.token").exists())
                 .andExpect(jsonPath("$.token").isNotEmpty())
                 .andExpect(jsonPath("$.token").isString());
+    }
+
+
+    @Test
+    void shouldReturn200WhenLogout() throws Exception {
+        // given
+        // when
+        ResultActions perform = this.mockMvc.perform(
+                post(URL_LOGOUT)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        perform
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").doesNotExist());
     }
 }

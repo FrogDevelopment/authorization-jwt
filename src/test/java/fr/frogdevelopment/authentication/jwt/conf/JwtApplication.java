@@ -1,8 +1,7 @@
-package fr.frogdevelopment.authentication.jwt;
+package fr.frogdevelopment.authentication.jwt.conf;
 
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
@@ -16,10 +15,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @SpringBootApplication(scanBasePackages = {"fr.frogdevelopment.authentication.jwt"})
 public class JwtApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(JwtApplication.class, args);
-    }
 
     @Bean
     public JdbcUserDetailsManager jdbcUserDetailsManager(DataSource dataSource) {
