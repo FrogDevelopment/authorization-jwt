@@ -17,6 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 @ActiveProfiles("test")
 @SpringJUnitConfig(JwtApplication.class)
@@ -33,29 +34,32 @@ class AuthenticationTest {
     @Test
     void shouldReturn401WhenLoginWithBadCredentials() throws Exception {
         // given
+        MockHttpServletRequestBuilder requestBuilder = post(URL_LOGIN)
+                .param(SPRING_SECURITY_FORM_USERNAME_KEY, "user")
+                .param(SPRING_SECURITY_FORM_PASSWORD_KEY, "bla bla bla")
+                .accept(MediaType.APPLICATION_JSON);
+
         // when
-        ResultActions perform = this.mockMvc.perform(
-                post(URL_LOGIN)
-                        .param(SPRING_SECURITY_FORM_USERNAME_KEY, "user")
-                        .param(SPRING_SECURITY_FORM_PASSWORD_KEY, "bla bla bla")
-                        .accept(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = this.mockMvc.perform(requestBuilder);
 
         // then
-        perform
+        resultActions
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$").doesNotExist());
     }
 
     @Test
     void shouldReturn200WithTokenWhenLoginWithGoodCredentials() throws Exception {
+        // given
+        MockHttpServletRequestBuilder requestBuilder = post(URL_LOGIN)
+                .param(SPRING_SECURITY_FORM_USERNAME_KEY, "admin")
+                .param(SPRING_SECURITY_FORM_PASSWORD_KEY, "security_is_fun")
+                .accept(MediaType.APPLICATION_JSON);
+
         // when
-        ResultActions perform = mockMvc.perform(
-                post(URL_LOGIN)
-                        .param(SPRING_SECURITY_FORM_USERNAME_KEY, "admin")
-                        .param(SPRING_SECURITY_FORM_PASSWORD_KEY, "security_is_fun")
-                        .accept(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = this.mockMvc.perform(requestBuilder);
         // then
-        perform
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.token").exists())
@@ -63,17 +67,17 @@ class AuthenticationTest {
                 .andExpect(jsonPath("$.token").isString());
     }
 
-
     @Test
     void shouldReturn200WhenLogout() throws Exception {
         // given
+        MockHttpServletRequestBuilder requestBuilder = post(URL_LOGOUT)
+                .accept(MediaType.APPLICATION_JSON);
+
         // when
-        ResultActions perform = this.mockMvc.perform(
-                post(URL_LOGOUT)
-                        .accept(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = this.mockMvc.perform(requestBuilder);
 
         // then
-        perform
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
     }
