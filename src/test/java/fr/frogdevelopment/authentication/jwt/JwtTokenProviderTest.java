@@ -1,10 +1,12 @@
 package fr.frogdevelopment.authentication.jwt;
 
 import static fr.frogdevelopment.authentication.jwt.JwtTokenProvider.CLAIM_NAME;
+import static fr.frogdevelopment.authentication.jwt.JwtTokenProvider.TOKEN_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import fr.frogdevelopment.authentication.jwt.conf.JwtApplication;
 import io.jsonwebtoken.Claims;
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -62,7 +65,7 @@ class JwtTokenProviderTest {
     void resolveToken_should_return_null_when_bad_header() {
         // given
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(jwtProperties.getHeader(), "BAD TOKEN");
+        request.addHeader(AUTHORIZATION, "BAD TOKEN");
 
         // when
         String token = jwtTokenProvider.resolveToken(request);
@@ -75,7 +78,7 @@ class JwtTokenProviderTest {
     void resolveToken_should_return_the_token_without_prefix() {
         // given
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(jwtProperties.getHeader(), jwtProperties.getPrefix() + "TOKEN TO RETURN");
+        request.addHeader(AUTHORIZATION, TOKEN_TYPE + "TOKEN TO RETURN");
 
         // when
         String token = jwtTokenProvider.resolveToken(request);
@@ -113,7 +116,7 @@ class JwtTokenProviderTest {
     void resolveName() {
         // given
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(jwtProperties.getHeader(), "BAD TOKEN");
+        request.addHeader(AUTHORIZATION, "BAD TOKEN");
 
         // when
         String resolvedName = jwtTokenProvider.resolveName(request);
@@ -132,7 +135,7 @@ class JwtTokenProviderTest {
                 .compact();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(jwtProperties.getHeader(), jwtProperties.getPrefix() + token);
+        request.addHeader(AUTHORIZATION, TOKEN_TYPE + token);
 
         // when
         String resolvedName = jwtTokenProvider.resolveName(request);
@@ -153,7 +156,7 @@ class JwtTokenProviderTest {
                 .compact();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(jwtProperties.getHeader(), jwtProperties.getPrefix() + token);
+        request.addHeader(AUTHORIZATION, TOKEN_TYPE + token);
 
         // when
         var authentication = jwtTokenProvider.createAuthentication(token);

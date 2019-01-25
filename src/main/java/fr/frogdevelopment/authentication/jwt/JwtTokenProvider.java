@@ -1,5 +1,7 @@
 package fr.frogdevelopment.authentication.jwt;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtTokenProvider {
 
+    static final String TOKEN_TYPE = "Bearer ";
     static final String CLAIM_NAME = "authorities";
 
     private final JwtProperties jwtProperties;
@@ -51,12 +54,12 @@ public class JwtTokenProvider {
     }
 
     String resolveToken(@NotNull HttpServletRequest request) {
-        var token = request.getHeader(jwtProperties.getHeader());
-        if (token == null || !token.startsWith(jwtProperties.getPrefix())) {
+        var token = request.getHeader(AUTHORIZATION);
+        if (token == null || !token.startsWith(TOKEN_TYPE)) {
             return null;
         }
 
-        return token.replace(jwtProperties.getPrefix(), "");
+        return token.replace(TOKEN_TYPE, "");
     }
 
     Claims resolveClaims(@NotNull String token) {
