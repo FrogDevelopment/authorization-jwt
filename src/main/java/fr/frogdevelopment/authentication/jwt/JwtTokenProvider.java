@@ -54,12 +54,12 @@ public class JwtTokenProvider {
     }
 
     String resolveToken(@NotNull HttpServletRequest request) {
-        var token = request.getHeader(AUTHORIZATION);
-        if (token == null || !token.startsWith(TOKEN_TYPE)) {
+        var bearer = request.getHeader(AUTHORIZATION);
+        if (bearer == null || !bearer.startsWith(TOKEN_TYPE)) {
             return null;
         }
 
-        return token.replace(TOKEN_TYPE, "");
+        return bearer.replace(TOKEN_TYPE, "");
     }
 
     Claims resolveClaims(@NotNull String token) {
