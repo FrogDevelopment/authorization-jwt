@@ -1,6 +1,6 @@
 package fr.frogdevelopment.authentication.jwt;
 
-import static fr.frogdevelopment.authentication.jwt.JwtTokenProvider.CLAIM_NAME;
+import static fr.frogdevelopment.authentication.jwt.JwtTokenProvider.AUTHORITIES_NAME;
 import static fr.frogdevelopment.authentication.jwt.JwtTokenProvider.TOKEN_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,7 +42,7 @@ class JwtTokenProviderTest {
         var authentication = new UsernamePasswordAuthenticationToken(username, null, grantedAuthorities);
 
         // when
-        var token = jwtTokenProvider.createToken(authentication);
+        var token = jwtTokenProvider.createAccessToken(authentication);
 
         // then
         assertNotNull(token);
@@ -151,7 +150,7 @@ class JwtTokenProviderTest {
         var roles = List.of("ADMIN", "USER");
         String token = Jwts.builder()
                 .setSubject(username)
-                .claim(CLAIM_NAME, roles)
+                .claim(AUTHORITIES_NAME, roles)
                 .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecretKey())
                 .compact();
 

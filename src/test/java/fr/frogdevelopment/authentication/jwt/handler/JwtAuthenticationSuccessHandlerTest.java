@@ -1,10 +1,12 @@
-package fr.frogdevelopment.authentication.jwt;
+package fr.frogdevelopment.authentication.jwt.handler;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import fr.frogdevelopment.authentication.jwt.JwtTokenProvider;
+import fr.frogdevelopment.authentication.jwt.handler.JwtAuthenticationSuccessHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +44,7 @@ class JwtAuthenticationSuccessHandlerTest {
     @Test
     void shouldWriteTheTokenToTheBodyAndReturnOK() throws IOException {
         // given
-        when(jwtTokenProvider.createToken(authentication)).thenReturn("MY_TOKEN");
+        when(jwtTokenProvider.createAccessToken(authentication)).thenReturn("MY_TOKEN");
         when(httpServletResponse.getWriter()).thenReturn(writer);
 
         // when
@@ -61,7 +63,7 @@ class JwtAuthenticationSuccessHandlerTest {
     @Test
     void shouldReturnErrorWhenException() throws IOException {
         // given
-        when(jwtTokenProvider.createToken(authentication)).thenReturn("MY_TOKEN");
+        when(jwtTokenProvider.createAccessToken(authentication)).thenReturn("MY_TOKEN");
         when(httpServletResponse.getWriter()).thenReturn(writer);
         doThrow(IOException.class).when(httpServletResponse).flushBuffer();
 

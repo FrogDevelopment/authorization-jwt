@@ -1,10 +1,12 @@
-package fr.frogdevelopment.authentication.jwt;
+package fr.frogdevelopment.authentication.jwt.filter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import fr.frogdevelopment.authentication.jwt.JwtTokenProvider;
+import fr.frogdevelopment.authentication.jwt.filter.JwtProcessTokenFilter;
 import io.jsonwebtoken.JwtException;
 import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
@@ -16,10 +18,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @ExtendWith(MockitoExtension.class)
-class JwtTokenFilterTest {
+class JwtProcessTokenFilterTest {
 
     @InjectMocks
-    private JwtTokenFilter jwtTokenFilter;
+    private JwtProcessTokenFilter jwtProcessTokenFilter;
 
     @Mock
     private JwtTokenProvider jwtTokenProvider;
@@ -70,7 +72,7 @@ class JwtTokenFilterTest {
     }
 
     private void whenCalled() {
-        jwtTokenFilter.setTokenOnSpringSecurityContext(httpServletRequest);
+        jwtProcessTokenFilter.setTokenOnSpringSecurityContext(httpServletRequest);
     }
 
     private Authentication getAuthenticationFromContext() {

@@ -1,5 +1,6 @@
-package fr.frogdevelopment.authentication.jwt;
+package fr.frogdevelopment.authentication.jwt.filter;
 
+import fr.frogdevelopment.authentication.jwt.JwtTokenProvider;
 import io.jsonwebtoken.JwtException;
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -13,11 +14,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Slf4j
-public class JwtTokenFilter extends OncePerRequestFilter {
+public class JwtProcessTokenFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
+    public JwtProcessTokenFilter(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -30,7 +31,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    void setTokenOnSpringSecurityContext(@NonNull HttpServletRequest request) {
+    protected void setTokenOnSpringSecurityContext(@NonNull HttpServletRequest request) {
         // resolve token
         var token = jwtTokenProvider.resolveToken(request);
 
