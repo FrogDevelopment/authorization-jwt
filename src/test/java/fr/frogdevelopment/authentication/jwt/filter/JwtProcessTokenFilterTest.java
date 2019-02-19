@@ -5,8 +5,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import fr.frogdevelopment.authentication.jwt.JwtTokenProvider;
-import fr.frogdevelopment.authentication.jwt.filter.JwtProcessTokenFilter;
+import fr.frogdevelopment.authentication.jwt.JwtParser;
 import io.jsonwebtoken.JwtException;
 import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,7 @@ class JwtProcessTokenFilterTest {
     private JwtProcessTokenFilter jwtProcessTokenFilter;
 
     @Mock
-    private JwtTokenProvider jwtTokenProvider;
+    private JwtParser jwtParser;
 
     @Mock
     private HttpServletRequest httpServletRequest;
@@ -45,7 +44,7 @@ class JwtProcessTokenFilterTest {
     void shouldClearSecurityContextWhenJwtExceptionIsRaised() {
         // given
         givenToken("TOKEN");
-        when(jwtTokenProvider.createAuthentication(anyString())).thenThrow(JwtException.class);
+        when(jwtParser.createAuthentication(anyString())).thenThrow(JwtException.class);
 
         // when
         whenCalled();
@@ -58,7 +57,7 @@ class JwtProcessTokenFilterTest {
     void shouldSetToken() {
         // given
         givenToken("TOKEN");
-        when(jwtTokenProvider.createAuthentication("TOKEN")).thenReturn(mock(Authentication.class));
+        when(jwtParser.createAuthentication("TOKEN")).thenReturn(mock(Authentication.class));
 
         // when
         whenCalled();
@@ -68,7 +67,7 @@ class JwtProcessTokenFilterTest {
     }
 
     private void givenToken(String token) {
-        when(jwtTokenProvider.resolveToken(httpServletRequest)).thenReturn(token);
+        when(jwtParser.retrieveToken(httpServletRequest)).thenReturn(token);
     }
 
     private void whenCalled() {

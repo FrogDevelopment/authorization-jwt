@@ -1,7 +1,6 @@
 package fr.frogdevelopment.authentication.jwt;
 
-import static fr.frogdevelopment.authentication.jwt.JwtTokenProvider.AUTHORITIES_NAME;
-import static fr.frogdevelopment.authentication.jwt.JwtTokenProvider.TOKEN_TYPE;
+import static fr.frogdevelopment.authentication.jwt.JwtParser.TOKEN_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -27,26 +25,12 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 @ActiveProfiles("test")
 @SpringJUnitConfig(JwtApplication.class)
 @SpringBootTest
-class JwtTokenProviderTest {
+class JwtParserTest {
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private JwtParser jwtParser;
     @Autowired
     private JwtProperties jwtProperties;
-
-    @Test
-    void createToken() {
-        // given
-        var username = "USERNAME";
-        var grantedAuthorities = List.of("ADMIN", "USER").stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-        var authentication = new UsernamePasswordAuthenticationToken(username, null, grantedAuthorities);
-
-        // when
-        var token = jwtTokenProvider.createAccessToken(authentication);
-
-        // then
-        assertNotNull(token);
-    }
 
     @Test
     void resolveToken_should_return_null_when_no_header() {
@@ -54,7 +38,7 @@ class JwtTokenProviderTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
 
         // when
-        String token = jwtTokenProvider.resolveToken(request);
+        String token = jwtParser.retrieveToken(request);
 
         // then
         assertNull(token);
@@ -67,7 +51,7 @@ class JwtTokenProviderTest {
         request.addHeader(AUTHORIZATION, "BAD TOKEN");
 
         // when
-        String token = jwtTokenProvider.resolveToken(request);
+        String token = jwtParser.retrieveToken(request);
 
         // then
         assertNull(token);
@@ -80,7 +64,7 @@ class JwtTokenProviderTest {
         request.addHeader(AUTHORIZATION, TOKEN_TYPE + "TOKEN TO RETURN");
 
         // when
-        String token = jwtTokenProvider.resolveToken(request);
+        String token = jwtParser.retrieveToken(request);
 
         // then
         assertEquals("TOKEN TO RETURN", token);
@@ -96,7 +80,7 @@ class JwtTokenProviderTest {
                 .compact();
 
         // when
-        Claims claims = jwtTokenProvider.resolveClaims(token);
+        Claims claims = jwtParser.resolveClaims(token);
 
         // then
         assertEquals(claims.getSubject(), username);
@@ -108,7 +92,7 @@ class JwtTokenProviderTest {
         String token = "BAD TOKEN";
 
         // when
-        assertThrows(BadCredentialsException.class, () -> jwtTokenProvider.resolveClaims(token));
+        assertThrows(BadCredentialsException.class, () -> jwtParser.resolveClaims(token));
     }
 
     @Test
@@ -118,7 +102,7 @@ class JwtTokenProviderTest {
         request.addHeader(AUTHORIZATION, "BAD TOKEN");
 
         // when
-        String resolvedName = jwtTokenProvider.resolveName(request);
+        String resolvedName = jwtParser.resolveName(request);
 
         // then
         assertNull(resolvedName);
@@ -137,7 +121,7 @@ class JwtTokenProviderTest {
         request.addHeader(AUTHORIZATION, TOKEN_TYPE + token);
 
         // when
-        String resolvedName = jwtTokenProvider.resolveName(request);
+        String resolvedName = jwtParser.resolveName(request);
 
         // then
         assertEquals(username, resolvedName);
@@ -150,7 +134,7 @@ class JwtTokenProviderTest {
         var roles = List.of("ADMIN", "USER");
         String token = Jwts.builder()
                 .setSubject(username)
-                .claim(AUTHORITIES_NAME, roles)
+                .claim(jwtProperties.getAuthoritiesKey(), roles)
                 .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecretKey())
                 .compact();
 
@@ -158,7 +142,7 @@ class JwtTokenProviderTest {
         request.addHeader(AUTHORIZATION, TOKEN_TYPE + token);
 
         // when
-        var authentication = jwtTokenProvider.createAuthentication(token);
+        var authentication = jwtParser.createAuthentication(token);
 
         // then
         assertNotNull(authentication);

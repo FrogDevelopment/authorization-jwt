@@ -1,6 +1,7 @@
 package fr.frogdevelopment.authentication.jwt.endpoint;
 
-import fr.frogdevelopment.authentication.jwt.JwtTokenProvider;
+import fr.frogdevelopment.authentication.jwt.JwtParser;
+import fr.frogdevelopment.authentication.jwt.TokenProvider;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -17,12 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 @ConditionalOnBean({UserDetailsService.class})
 public class RefreshTokenEndpoint {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtParser jwtParser;
+    private final TokenProvider tokenProvider;
     private final UserDetailsService userDetailsService;
 
-    public RefreshTokenEndpoint(JwtTokenProvider jwtTokenProvider,
+    public RefreshTokenEndpoint(JwtParser jwtParser,
+                                TokenProvider tokenProvider,
                                 UserDetailsService userDetailsService) {
-        this.jwtTokenProvider = jwtTokenProvider;
+        this.jwtParser = jwtParser;
+        this.tokenProvider = tokenProvider;
         this.userDetailsService = userDetailsService;
     }
 
@@ -30,9 +34,9 @@ public class RefreshTokenEndpoint {
     @GetMapping(value = "auth/token/refresh", produces = {MediaType.TEXT_PLAIN_VALUE})
     public String refreshToken(HttpServletRequest request) {
 
-        String username = jwtTokenProvider.refreshToken(request);
+        String username = jwtParser.refreshToken(request);
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        return jwtTokenProvider.createAccessToken(userDetails);
+        return tokenProvider.createAccessToken(userDetails).toJwt();
     }
 }

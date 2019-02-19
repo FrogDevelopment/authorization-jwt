@@ -1,6 +1,6 @@
 package fr.frogdevelopment.authentication.jwt.filter;
 
-import fr.frogdevelopment.authentication.jwt.JwtTokenProvider;
+import fr.frogdevelopment.authentication.jwt.JwtParser;
 import io.jsonwebtoken.JwtException;
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -16,10 +16,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 public class JwtProcessTokenFilter extends OncePerRequestFilter {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtParser jwtParser;
 
-    public JwtProcessTokenFilter(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
+    public JwtProcessTokenFilter(JwtParser jwtParser) {
+        this.jwtParser = jwtParser;
     }
 
     @Override
@@ -31,21 +31,18 @@ public class JwtProcessTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    protected void setTokenOnSpringSecurityContext(@NonNull HttpServletRequest request) {
-        // resolve token
-        var token = jwtTokenProvider.resolveToken(request);
+    void setTokenOnSpringSecurityContext(@NonNull HttpServletRequest request) {
+        try {
+            // resolve && parsing token
+            Authentication authentication = jwtParser.createAuthentication(request);
 
-        if (token != null) {
-            try {
-                // parsing token
-                Authentication authentication = jwtTokenProvider.createAuthentication(token);
-
+            if (authentication != null) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            } catch (JwtException ex) {
-                log.error("Error while trying to resolve token", ex);
-                // In case of failure. Make sure it's clear; so guarantee user won't be authenticated
-                SecurityContextHolder.clearContext();
             }
+        } catch (JwtException ex) {
+            log.error("Error while trying to resolve token", ex);
+            // In case of failure. Make sure it's clear; so guarantee user won't be authenticated
+            SecurityContextHolder.clearContext();
         }
     }
 }

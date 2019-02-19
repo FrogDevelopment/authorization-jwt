@@ -23,7 +23,7 @@ public abstract class JwtSecurityConfigurerAdapter extends WebSecurityConfigurer
     private static final String TOKEN_REFRESH_ENTRY_POINT = "auth/token/refresh";
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private JwtParser jwtParser;
     @Autowired
     private JwtAuthenticationSuccessHandler successHandler;
     @Autowired
@@ -45,7 +45,7 @@ public abstract class JwtSecurityConfigurerAdapter extends WebSecurityConfigurer
                 );
 
         // Apply JWT
-        http.addFilterBefore(new JwtProcessTokenFilter(jwtTokenProvider), LogoutFilter.class);
+        http.addFilterBefore(new JwtProcessTokenFilter(jwtParser), LogoutFilter.class);
 
         // Entry points
         http.authorizeRequests()
