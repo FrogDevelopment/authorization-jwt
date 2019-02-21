@@ -131,7 +131,7 @@ class JwtParserTest {
         var roles = List.of("ADMIN", "USER");
         String token = Jwts.builder()
                 .setSubject(username)
-                .claim(jwtProperties.getAuthoritiesKey(), roles)
+                .claim(TokenProvider.AUTHORITIES_KEY, roles)
                 .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecretKey())
                 .compact();
 
@@ -144,7 +144,7 @@ class JwtParserTest {
         // then
         assertNotNull(authentication);
         assertEquals(authentication.getPrincipal(), username);
-        assertNull(authentication.getCredentials());
+        assertEquals(authentication.getCredentials(), "***********");
         var authorities = roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         assertEquals(authentication.getAuthorities(), authorities);
     }

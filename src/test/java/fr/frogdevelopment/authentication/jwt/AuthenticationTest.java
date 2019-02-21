@@ -62,9 +62,9 @@ class AuthenticationTest {
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.token").exists())
-                .andExpect(jsonPath("$.token").isNotEmpty())
-                .andExpect(jsonPath("$.token").isString());
+                .andExpect(jsonPath("$.accessToken").isString())
+                .andExpect(jsonPath("$.expirationDate").isString())
+                .andExpect(jsonPath("$.refreshToken").isString());
     }
 
     @Test

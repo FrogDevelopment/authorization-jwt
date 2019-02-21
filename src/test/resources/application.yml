@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: jwt-authentication
   main:
     banner-mode: 'off'
   datasource:

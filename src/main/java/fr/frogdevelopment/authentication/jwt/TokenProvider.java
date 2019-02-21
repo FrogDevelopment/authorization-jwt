@@ -1,20 +1,30 @@
 package fr.frogdevelopment.authentication.jwt;
 
+import static java.lang.String.format;
+
+import java.time.temporal.ChronoUnit;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 @Slf4j
 @Component
 public class TokenProvider {
 
-    private final String issuer;
+    static final String AUTHORITIES_KEY = "authorities";
+
+    private final String issuer; // fixme should be user-service url
     private final JwtProperties jwtProperties;
 
     @Autowired
@@ -26,48 +36,48 @@ public class TokenProvider {
 
     @NotNull
     public Token createAccessToken(@NotNull UserDetails userDetails) {
-        var authorities = userDetails.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toSet());
-
-        return Token.builder()
-                .issuer(issuer)
-                .subject(userDetails.getUsername())
-                .authoritiesKey(jwtProperties.getAuthoritiesKey())
-                .authorities(authorities)
-                .expiration(jwtProperties.getAccessTokenExpirationTime())
-                .secretKey(jwtProperties.getSecretKey())
-                .build();
+        return createAccessToken(
+                userDetails.getUsername(),
+                userDetails.getAuthorities()
+                        .stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toSet()));
     }
 
     @NotNull
     public Token createAccessToken(@NotNull Authentication authentication) {
-        var authorities = authentication.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toSet());
+        return createAccessToken(
+                authentication.getName(),
+                authentication.getAuthorities()
+                        .stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toSet()));
+    }
+
+    @NotNull
+    private Token createAccessToken(String subject, Set<String> authorities) {
+        if (CollectionUtils.isEmpty(authorities)) {
+            throw new InsufficientAuthenticationException(format("User %s has no authorities assigned", subject));
+        }
 
         return Token.builder()
                 .issuer(issuer)
-                .subject(authentication.getName())
-                .authoritiesKey(jwtProperties.getAuthoritiesKey())
-                .authorities(authorities)
-                .expiration(jwtProperties.getAccessTokenExpirationTime())
+                .subject(subject)
+                .claims(Map.of(AUTHORITIES_KEY, authorities))
+                .expiration(jwtProperties.getAccessTokenExpiration())
+                .temporalUnit(ChronoUnit.SECONDS)
                 .secretKey(jwtProperties.getSecretKey())
                 .build();
     }
 
     @NotNull
     public Token createRefreshToken(@NotNull Authentication authentication) {
-        var authorities = jwtProperties.getRolesRefresh();
-
         return Token.builder()
+                .id(UUID.randomUUID().toString())
                 .issuer(issuer)
                 .subject(authentication.getName())
-                .authoritiesKey(jwtProperties.getAuthoritiesKey())
-                .authorities(authorities)
-                .expiration(jwtProperties.getRefreshTokenExpirationTime())
+                .expiration(jwtProperties.getRefreshTokenExpiration())
+                .temporalUnit(ChronoUnit.DAYS)
                 .secretKey(jwtProperties.getSecretKey())
                 .build();
     }

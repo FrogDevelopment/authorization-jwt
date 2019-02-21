@@ -90,6 +90,6 @@ public class JwtParser {
 
     private List<String> resolveAuthorities(@NotNull Claims claims) {
         //noinspection unchecked
-        return (List<String>) claims.get(jwtProperties.getAuthoritiesKey(), List.class);
+        return (List<String>) claims.get(TokenProvider.AUTHORITIES_KEY, List.class);
     }
 }
