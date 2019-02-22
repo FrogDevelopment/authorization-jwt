@@ -24,7 +24,7 @@ class TokenTest {
         Token token = Token.builder()
                 .subject("test")
                 .expiration(10)
-                .temporalUnit(ChronoUnit.CENTURIES)
+                .chronoUnit(ChronoUnit.CENTURIES)
                 .secretKey("SECRET_KEY")
                 .build();
 

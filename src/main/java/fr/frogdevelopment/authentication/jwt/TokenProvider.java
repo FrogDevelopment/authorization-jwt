@@ -65,7 +65,7 @@ public class TokenProvider {
                 .subject(subject)
                 .claims(Map.of(AUTHORITIES_KEY, authorities))
                 .expiration(jwtProperties.getAccessTokenExpiration())
-                .temporalUnit(ChronoUnit.SECONDS)
+                .chronoUnit(ChronoUnit.SECONDS)
                 .secretKey(jwtProperties.getSecretKey())
                 .build();
     }
@@ -77,7 +77,7 @@ public class TokenProvider {
                 .issuer(issuer)
                 .subject(authentication.getName())
                 .expiration(jwtProperties.getRefreshTokenExpiration())
-                .temporalUnit(ChronoUnit.DAYS)
+                .chronoUnit(ChronoUnit.DAYS)
                 .secretKey(jwtProperties.getSecretKey())
                 .build();
     }

@@ -90,7 +90,7 @@ class JwtAuthenticationSuccessHandlerTest {
         return Token.builder()
                 .subject("test")
                 .expiration(10)
-                .temporalUnit(ChronoUnit.DAYS)
+                .chronoUnit(ChronoUnit.DAYS)
                 .secretKey("secret-key")
                 .build();
     }

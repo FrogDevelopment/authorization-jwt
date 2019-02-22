@@ -24,7 +24,7 @@ public class Token {
     @NonNull
     private long expiration;
     @NonNull
-    private ChronoUnit temporalUnit;
+    private ChronoUnit chronoUnit;
     @NonNull
     private String secretKey;
 
@@ -32,7 +32,7 @@ public class Token {
 
     public String toJwt() {
         LocalDateTime issuedAt = LocalDateTime.now();
-        expirationDate = toDate(issuedAt.plus(expiration, temporalUnit));
+        expirationDate = toDate(issuedAt.plus(expiration, chronoUnit));
 
         return Jwts.builder()
                 .setId(id)

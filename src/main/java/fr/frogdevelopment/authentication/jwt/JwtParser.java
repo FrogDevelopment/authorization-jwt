@@ -82,14 +82,16 @@ public class JwtParser {
 
         var username = claims.getSubject();
 
-        var grantedAuthorities = resolveAuthorities(claims).stream().map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        var grantedAuthorities = resolveAuthorities(claims);
 
         return new JwtAuthenticationToken(username, grantedAuthorities);
     }
 
-    private List<String> resolveAuthorities(@NotNull Claims claims) {
+    private List<SimpleGrantedAuthority> resolveAuthorities(@NotNull Claims claims) {
         //noinspection unchecked
-        return (List<String>) claims.get(TokenProvider.AUTHORITIES_KEY, List.class);
+        return ((List<String>) claims.get(TokenProvider.AUTHORITIES_KEY, List.class))
+                .stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 }
