@@ -1,5 +1,7 @@
 package fr.frogdevelopment.authentication.jwt;
 
+import static fr.frogdevelopment.authentication.jwt.DateUtils.toDate;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.time.LocalDateTime;
@@ -45,9 +47,6 @@ public class Token {
                 .compact();
     }
 
-    @NotNull
-    private Date toDate(LocalDateTime expiration) {
-        return Date.from(expiration.atZone(ZoneId.systemDefault()).toInstant());
-    }
+
 
 }

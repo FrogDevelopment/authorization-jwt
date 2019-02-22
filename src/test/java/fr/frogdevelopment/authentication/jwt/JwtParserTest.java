@@ -4,96 +4,60 @@ import static fr.frogdevelopment.authentication.jwt.JwtParser.TOKEN_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-import fr.frogdevelopment.authentication.jwt.conf.JwtApplication;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 @ActiveProfiles("test")
-@SpringJUnitConfig(JwtApplication.class)
-@SpringBootTest
+@RunWith(JUnitPlatform.class)
+@ExtendWith(MockitoExtension.class)
 class JwtParserTest {
 
-    @Autowired
+    private static final String SECRET_KEY = "SECRET_KEY";
+    private static final String USERNAME = "USERNAME";
+
+    @InjectMocks
     private JwtParser jwtParser;
-    @Autowired
+    @Mock
     private JwtProperties jwtProperties;
-
-//    @Test
-//    void resolveToken_should_return_null_when_no_header() {
-//        // given
-//        MockHttpServletRequest request = new MockHttpServletRequest();
-//
-//        // when
-//        String token = jwtParser.retrieveToken(request);
-//
-//        // then
-//        assertNull(token);
-//    }
-
-//    @Test
-//    void resolveToken_should_return_null_when_bad_header() {
-//        // given
-//        MockHttpServletRequest request = new MockHttpServletRequest();
-//        request.addHeader(AUTHORIZATION, "BAD TOKEN");
-//
-//        // when
-//        String token = jwtParser.retrieveToken(request);
-//
-//        // then
-//        assertNull(token);
-//    }
-
-//    @Test
-//    void resolveToken_should_return_the_token_without_prefix() {
-//        // given
-//        MockHttpServletRequest request = new MockHttpServletRequest();
-//        request.addHeader(AUTHORIZATION, TOKEN_TYPE + "TOKEN TO RETURN");
-//
-//        // when
-//        String token = jwtParser.retrieveToken(request);
-//
-//        // then
-//        assertEquals("TOKEN TO RETURN", token);
-//    }
-
-//    @Test
-//    void resolveClaims() {
-//        // given
-//        var username = "USERNAME";
-//        String token = Jwts.builder()
-//                .setSubject(username)
-//                .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecretKey())
-//                .compact();
-//
-//        // when
-//        Claims claims = jwtParser.resolveClaims(token);
-//
-//        // then
-//        assertEquals(claims.getSubject(), username);
-//    }
-
-//    @Test
-//    void resolveClaims_should_throw_an_exception() {
-//        // given
-//        String token = "BAD TOKEN";
-//
-//        // when
-//        assertThrows(BadCredentialsException.class, () -> jwtParser.resolveClaims(token));
-//    }
+    @Mock
+    private RefreshTokenVerifier refreshTokenVerifier;
 
     @Test
-    void resolveName() {
+    void resolveName_should_return_null_when_missing_authorization() {
+        // given
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("BAD HEADER", "BAD TOKEN");
+
+        // when
+        String resolvedName = jwtParser.resolveName(request);
+
+        // then
+        assertNull(resolvedName);
+    }
+
+    @Test
+    void resolveName_should_return_null_when_wrong_header_token() {
         // given
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(AUTHORIZATION, "BAD TOKEN");
@@ -106,12 +70,48 @@ class JwtParserTest {
     }
 
     @Test
-    void resolveName_should_return_null() {
+    void resolveName_should_throw_exception_when_wrong_signed_token() {
         // given
-        var username = "USERNAME";
+        givenSecretKey();
+
         String token = Jwts.builder()
-                .setSubject(username)
-                .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecretKey())
+                .setSubject(USERNAME)
+                .signWith(SignatureAlgorithm.HS512, "OTHER_SECRET_KEY")
+                .compact();
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader(AUTHORIZATION, TOKEN_TYPE + token);
+
+        // when
+        assertThrows(SignatureException.class, () -> jwtParser.resolveName(request));
+    }
+
+    @Test
+    void resolveName_should_throw_exception_when_expired_token() {
+        // given
+        givenSecretKey();
+
+        String token = Jwts.builder()
+                .setSubject(USERNAME)
+                .setExpiration(DateUtils.toDate(LocalDateTime.now().minusMinutes(1)))
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .compact();
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader(AUTHORIZATION, TOKEN_TYPE + token);
+
+        // when
+        assertThrows(ExpiredJwtException.class, () -> jwtParser.resolveName(request));
+    }
+
+    @Test
+    void resolveName_should_return_name_from_token() {
+        // given
+        givenSecretKey();
+
+        String token = Jwts.builder()
+                .setSubject(USERNAME)
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -121,16 +121,57 @@ class JwtParserTest {
         String resolvedName = jwtParser.resolveName(request);
 
         // then
-        assertEquals(username, resolvedName);
+        assertEquals(USERNAME, resolvedName);
     }
 
     @Test
-    void createAuthentication() {
+    void refreshToken_should_return_throw_an_exception_when_revoked() {
         // given
-        var username = "USERNAME";
+        givenSecretKey();
+
+        String token = Jwts.builder()
+                .setSubject(USERNAME)
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .compact();
+
+        willThrow(RevokedTokenException.class)
+                .given(refreshTokenVerifier).verify(any());
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader(AUTHORIZATION, TOKEN_TYPE + token);
+
+        // when
+        assertThrows(RevokedTokenException.class, () -> jwtParser.refreshToken(request));
+    }
+
+    @Test
+    void refreshToken_should_return_username() {
+        // given
+        givenSecretKey();
+
+        String token = Jwts.builder()
+                .setSubject(USERNAME)
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .compact();
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader(AUTHORIZATION, TOKEN_TYPE + token);
+
+        // when
+        String resolvedName = jwtParser.refreshToken(request);
+
+        // then
+        assertEquals(USERNAME, resolvedName);
+    }
+
+    @Test
+    void createAuthentication_should_return_authentication() {
+        // given
+        givenSecretKey();
+
         var roles = List.of("ADMIN", "USER");
         String token = Jwts.builder()
-                .setSubject(username)
+                .setSubject(USERNAME)
                 .claim(TokenProvider.AUTHORITIES_KEY, roles)
                 .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecretKey())
                 .compact();
@@ -143,10 +184,14 @@ class JwtParserTest {
 
         // then
         assertNotNull(authentication);
-        assertEquals(authentication.getPrincipal(), username);
-        assertEquals(authentication.getCredentials(), "***********");
+        assertEquals(authentication.getPrincipal(), USERNAME);
+        assertNull(authentication.getCredentials());
         var authorities = roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         assertEquals(authentication.getAuthorities(), authorities);
+    }
+
+    private void givenSecretKey() {
+        given(jwtProperties.getSecretKey()).willReturn(SECRET_KEY);
     }
 
 }
