@@ -5,14 +5,12 @@ import static fr.frogdevelopment.authentication.jwt.DateUtils.toDate;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import org.jetbrains.annotations.NotNull;
 
 @Getter
 @Builder
@@ -46,7 +44,6 @@ public class Token {
                 .addClaims(claims)
                 .compact();
     }
-
 
 
 }
