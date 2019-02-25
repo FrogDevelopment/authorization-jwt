@@ -1,7 +1,7 @@
 package fr.frogdevelopment.authentication.jwt.filter;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -29,9 +29,9 @@ class JwtProcessTokenFilterTest {
     private HttpServletRequest httpServletRequest;
 
     @Test
-    void shouldClearSecurityContextWhenTokenIsNull() {
+    void shouldClearSecurityContextWhenAuthenticationIsNull() {
         // given
-        givenToken(null);
+        givenAuthentication(null);
 
         // when
         whenCalled();
@@ -43,8 +43,7 @@ class JwtProcessTokenFilterTest {
     @Test
     void shouldClearSecurityContextWhenJwtExceptionIsRaised() {
         // given
-        givenToken("TOKEN");
-//        when(jwtParser.createAuthentication(anyString())).thenThrow(JwtException.class);
+        when(jwtParser.createAuthentication(any())).thenThrow(JwtException.class);
 
         // when
         whenCalled();
@@ -56,8 +55,7 @@ class JwtProcessTokenFilterTest {
     @Test
     void shouldSetToken() {
         // given
-        givenToken("TOKEN");
-        when(jwtParser.createAuthentication(httpServletRequest)).thenReturn(mock(Authentication.class));
+        givenAuthentication(mock(Authentication.class));
 
         // when
         whenCalled();
@@ -66,8 +64,8 @@ class JwtProcessTokenFilterTest {
         assertThat(getAuthenticationFromContext()).isNotNull();
     }
 
-    private void givenToken(String token) {
-//        when(jwtParser.retrieveToken(httpServletRequest)).thenReturn(token);
+    private void givenAuthentication(Authentication authentication) {
+        when(jwtParser.createAuthentication(httpServletRequest)).thenReturn(authentication);
     }
 
     private void whenCalled() {
