@@ -1,18 +1,19 @@
 package fr.frogdevelopment.authentication.jwt;
 
 import io.jsonwebtoken.Claims;
+import java.util.Objects;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RefreshTokenVerifier {
+class RefreshTokenVerifier {
 
-    public void verify(Claims claims) {
-        verifyRevokedToken();
+    void verify(Claims claims) {
+        verifyRevokedToken(claims.getId());
     }
 
-    private void verifyRevokedToken() {
+    private void verifyRevokedToken(String jti) {
+        Objects.requireNonNull(jti, "Required id !!!");
 //        fixme implement revoked tokens checking (by logout)
-//        claims.getId()
 //        throw new org.springframework.security.authentication.CredentialsExpiredException("");
     }
 
