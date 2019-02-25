@@ -1,7 +1,5 @@
 package fr.frogdevelopment.authentication.jwt;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import java.util.List;
@@ -19,25 +17,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtParser {
 
-    static final String TOKEN_TYPE = "Bearer ";
-
     private final JwtProperties jwtProperties;
     private final RefreshTokenVerifier refreshTokenVerifier;
+    private final RequestParser requestParser;
 
     @Autowired
     public JwtParser(JwtProperties jwtProperties,
-                     RefreshTokenVerifier refreshTokenVerifier) {
+                     RefreshTokenVerifier refreshTokenVerifier,
+                     RequestParser requestParser) {
         this.jwtProperties = jwtProperties;
         this.refreshTokenVerifier = refreshTokenVerifier;
-    }
-
-    private String retrieveToken(@NotNull HttpServletRequest request) {
-        var bearer = request.getHeader(AUTHORIZATION);
-        if (bearer == null || !bearer.startsWith(TOKEN_TYPE)) {
-            return null;
-        }
-
-        return bearer.replace(TOKEN_TYPE, "");
+        this.requestParser = requestParser;
     }
 
     private Claims resolveClaims(@NotNull String token) {
@@ -49,7 +39,7 @@ public class JwtParser {
 
     @Nullable
     public String resolveName(@NotNull HttpServletRequest request) {
-        var token = retrieveToken(request);
+        var token = requestParser.retrieveToken(request);
         if (token == null) {
             return null;
         }
@@ -59,7 +49,7 @@ public class JwtParser {
 
     @Nullable
     public String refreshToken(@NotNull HttpServletRequest request) {
-        var token = retrieveToken(request);
+        var token = requestParser.retrieveToken(request);
         if (token == null) {
             return null;
         }
@@ -73,7 +63,7 @@ public class JwtParser {
 
     @Nullable
     public Authentication createAuthentication(@NotNull HttpServletRequest request) {
-        var token = retrieveToken(request);
+        var token = requestParser.retrieveToken(request);
         if (token == null) {
             return null;
         }

@@ -1,6 +1,5 @@
 package fr.frogdevelopment.authentication.jwt;
 
-import static fr.frogdevelopment.authentication.jwt.JwtParser.TOKEN_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -8,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -42,31 +40,20 @@ class JwtParserTest {
     private JwtProperties jwtProperties;
     @Mock
     private RefreshTokenVerifier refreshTokenVerifier;
+    @Mock
+    private RequestParser requestParser;
 
     @Test
-    void resolveName_should_return_null_when_missing_authorization() {
+    void resolveName_shouldReturn_null_when_incorrect_request() {
         // given
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader("BAD HEADER", "BAD TOKEN");
+        given(requestParser.retrieveToken(request)).willReturn(null);
 
         // when
-        String resolvedName = jwtParser.resolveName(request);
+        String resolveName = jwtParser.resolveName(request);
 
         // then
-        assertNull(resolvedName);
-    }
-
-    @Test
-    void resolveName_should_return_null_when_wrong_header_token() {
-        // given
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(AUTHORIZATION, "BAD TOKEN");
-
-        // when
-        String resolvedName = jwtParser.resolveName(request);
-
-        // then
-        assertNull(resolvedName);
+        assertNull(resolveName);
     }
 
     @Test
@@ -80,7 +67,7 @@ class JwtParserTest {
                 .compact();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(AUTHORIZATION, TOKEN_TYPE + token);
+        given(requestParser.retrieveToken(request)).willReturn(token);
 
         // when
         assertThrows(SignatureException.class, () -> jwtParser.resolveName(request));
@@ -98,7 +85,7 @@ class JwtParserTest {
                 .compact();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(AUTHORIZATION, TOKEN_TYPE + token);
+        given(requestParser.retrieveToken(request)).willReturn(token);
 
         // when
         assertThrows(ExpiredJwtException.class, () -> jwtParser.resolveName(request));
@@ -115,13 +102,27 @@ class JwtParserTest {
                 .compact();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(AUTHORIZATION, TOKEN_TYPE + token);
+        given(requestParser.retrieveToken(request)).willReturn(token);
 
         // when
         String resolvedName = jwtParser.resolveName(request);
 
         // then
         assertEquals(USERNAME, resolvedName);
+    }
+
+
+    @Test
+    void refreshToken_shouldReturn_null_when_incorrect_request() {
+        // given
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        given(requestParser.retrieveToken(request)).willReturn(null);
+
+        // when
+        String resolveName = jwtParser.refreshToken(request);
+
+        // then
+        assertNull(resolveName);
     }
 
     @Test
@@ -138,7 +139,7 @@ class JwtParserTest {
                 .given(refreshTokenVerifier).verify(any());
 
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(AUTHORIZATION, TOKEN_TYPE + token);
+        given(requestParser.retrieveToken(request)).willReturn(token);
 
         // when
         assertThrows(RevokedTokenException.class, () -> jwtParser.refreshToken(request));
@@ -155,7 +156,7 @@ class JwtParserTest {
                 .compact();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(AUTHORIZATION, TOKEN_TYPE + token);
+        given(requestParser.retrieveToken(request)).willReturn(token);
 
         // when
         String resolvedName = jwtParser.refreshToken(request);
@@ -177,14 +178,14 @@ class JwtParserTest {
                 .compact();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(AUTHORIZATION, TOKEN_TYPE + token);
+        given(requestParser.retrieveToken(request)).willReturn(token);
 
         // when
         var authentication = jwtParser.createAuthentication(request);
 
         // then
         assertNotNull(authentication);
-        assertEquals(authentication.getPrincipal(), USERNAME);
+        assertEquals(USERNAME, authentication.getPrincipal());
         assertNull(authentication.getCredentials());
         var authorities = roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         assertEquals(authentication.getAuthorities(), authorities);
