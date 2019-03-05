@@ -1,5 +1,8 @@
 package fr.frogdevelopment.authentication.jwt.conf;
 
+import fr.frogdevelopment.authentication.jwt.JwtUserDetailsService;
+import java.util.HashSet;
+import java.util.Set;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -35,5 +38,22 @@ public class JwtApplication {
         dataSourceInitializer.setDatabasePopulator(new ResourceDatabasePopulator(scriptCreate, scriptInsert));
 
         return dataSourceInitializer;
+    }
+
+    @Bean
+    public JwtUserDetailsService jwtUserDetailsService() {
+        return new JwtUserDetailsService() {
+            private final Set<String> tokens = new HashSet<>();
+
+            @Override
+            public void addRevokedToken(String jti) {
+                tokens.add(jti);
+            }
+
+            @Override
+            public boolean isRevoked(String jti) {
+                return tokens.contains(jti);
+            }
+        };
     }
 }

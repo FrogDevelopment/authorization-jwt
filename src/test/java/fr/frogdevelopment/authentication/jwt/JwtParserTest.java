@@ -44,20 +44,20 @@ class JwtParserTest {
     private RequestParser requestParser;
 
     @Test
-    void resolveName_shouldReturn_null_when_incorrect_request() {
+    void getUsernameFromToken_shouldReturn_null_when_incorrect_request() {
         // given
         MockHttpServletRequest request = new MockHttpServletRequest();
         given(requestParser.retrieveToken(request)).willReturn(null);
 
         // when
-        String resolveName = jwtParser.resolveName(request);
+        String username = jwtParser.getUsernameFromToken(request);
 
         // then
-        assertNull(resolveName);
+        assertNull(username);
     }
 
     @Test
-    void resolveName_should_throw_exception_when_wrong_signed_token() {
+    void getUsernameFromToken_should_throw_exception_when_wrong_signed_token() {
         // given
         givenSecretKey();
 
@@ -70,11 +70,11 @@ class JwtParserTest {
         given(requestParser.retrieveToken(request)).willReturn(token);
 
         // when
-        assertThrows(SignatureException.class, () -> jwtParser.resolveName(request));
+        assertThrows(SignatureException.class, () -> jwtParser.getUsernameFromToken(request));
     }
 
     @Test
-    void resolveName_should_throw_exception_when_expired_token() {
+    void getUsernameFromToken_should_throw_exception_when_expired_token() {
         // given
         givenSecretKey();
 
@@ -88,11 +88,11 @@ class JwtParserTest {
         given(requestParser.retrieveToken(request)).willReturn(token);
 
         // when
-        assertThrows(ExpiredJwtException.class, () -> jwtParser.resolveName(request));
+        assertThrows(ExpiredJwtException.class, () -> jwtParser.getUsernameFromToken(request));
     }
 
     @Test
-    void resolveName_should_return_name_from_token() {
+    void getUsernameFromToken_should_return_name_from_token() {
         // given
         givenSecretKey();
 
@@ -105,10 +105,10 @@ class JwtParserTest {
         given(requestParser.retrieveToken(request)).willReturn(token);
 
         // when
-        String resolvedName = jwtParser.resolveName(request);
+        String username = jwtParser.getUsernameFromToken(request);
 
         // then
-        assertEquals(USERNAME, resolvedName);
+        assertEquals(USERNAME, username);
     }
 
 
@@ -119,10 +119,10 @@ class JwtParserTest {
         given(requestParser.retrieveToken(request)).willReturn(null);
 
         // when
-        String resolveName = jwtParser.refreshToken(request);
+        String username = jwtParser.getUsernameFromRefreshToken(request);
 
         // then
-        assertNull(resolveName);
+        assertNull(username);
     }
 
     @Test
@@ -142,7 +142,7 @@ class JwtParserTest {
         given(requestParser.retrieveToken(request)).willReturn(token);
 
         // when
-        assertThrows(RevokedTokenException.class, () -> jwtParser.refreshToken(request));
+        assertThrows(RevokedTokenException.class, () -> jwtParser.getUsernameFromRefreshToken(request));
     }
 
     @Test
@@ -159,7 +159,7 @@ class JwtParserTest {
         given(requestParser.retrieveToken(request)).willReturn(token);
 
         // when
-        String resolvedName = jwtParser.refreshToken(request);
+        String resolvedName = jwtParser.getUsernameFromRefreshToken(request);
 
         // then
         assertEquals(USERNAME, resolvedName);

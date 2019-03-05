@@ -23,7 +23,7 @@ public class JwtParser {
 
     @Autowired
     public JwtParser(JwtProperties jwtProperties,
-                     RefreshTokenVerifier refreshTokenVerifier,
+                     @Autowired(required = false) RefreshTokenVerifier refreshTokenVerifier,
                      RequestParser requestParser) {
         this.jwtProperties = jwtProperties;
         this.refreshTokenVerifier = refreshTokenVerifier;
@@ -38,7 +38,7 @@ public class JwtParser {
     }
 
     @Nullable
-    public String resolveName(@NotNull HttpServletRequest request) {
+    public String getUsernameFromToken(@NotNull HttpServletRequest request) {
         var token = requestParser.retrieveToken(request);
         if (token == null) {
             return null;
@@ -48,7 +48,17 @@ public class JwtParser {
     }
 
     @Nullable
-    public String refreshToken(@NotNull HttpServletRequest request) {
+    public String getIdFromRefreshToken(@NotNull HttpServletRequest request) {
+        var token = requestParser.retrieveToken(request);
+        if (token == null) {
+            return null;
+        }
+
+        return resolveClaims(token).getId();
+    }
+
+    @Nullable
+    public String getUsernameFromRefreshToken(@NotNull HttpServletRequest request) {
         var token = requestParser.retrieveToken(request);
         if (token == null) {
             return null;
@@ -56,7 +66,9 @@ public class JwtParser {
 
         var claims = resolveClaims(token);
 
-        refreshTokenVerifier.verify(claims);
+        if (refreshTokenVerifier != null) {
+            refreshTokenVerifier.verify(claims);
+        }
 
         return claims.getSubject();
     }

@@ -3,18 +3,16 @@ package fr.frogdevelopment.authentication.jwt.handler;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.frogdevelopment.authentication.jwt.Token;
 import fr.frogdevelopment.authentication.jwt.TokenProvider;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,10 +21,9 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.Authentication;
 
 @ExtendWith(MockitoExtension.class)
-class JwtAuthenticationSuccessHandlerTest {
+class JwtAuthenticationSuccessHandlerTest extends AbstractJwtAuthenticationSuccessHandlerTest {
 
     @InjectMocks
     private JwtAuthenticationSuccessHandler jwtAuthenticationSuccessHandler;
@@ -36,15 +33,6 @@ class JwtAuthenticationSuccessHandlerTest {
     @Mock
     private ObjectMapper objectMapper;
 
-    @Mock
-    private HttpServletRequest httpServletRequest;
-    @Mock
-    private HttpServletResponse httpServletResponse;
-    @Mock
-    private Authentication authentication;
-    @Mock
-    private PrintWriter writer;
-
     @Captor
     private ArgumentCaptor<Map<String, Object>> bodyTokenCaptor;
 
@@ -53,7 +41,6 @@ class JwtAuthenticationSuccessHandlerTest {
         // given
         givenAccessToken();
         givenRefreshToken();
-        when(httpServletResponse.getWriter()).thenReturn(writer);
 
         // when
         jwtAuthenticationSuccessHandler
@@ -61,8 +48,7 @@ class JwtAuthenticationSuccessHandlerTest {
 
         // then
         verify(objectMapper).writeValue(eq(writer), bodyTokenCaptor.capture());
-        Map<String, Object> body = bodyTokenCaptor.getValue();
-        assertThat(body).containsKeys("accessToken", "expirationDate", "refreshToken");
+        assertThat(bodyTokenCaptor.getValue()).containsKeys("accessToken", "expirationDate", "refreshToken");
 
         verify(httpServletResponse).setStatus(HttpServletResponse.SC_OK);
         verify(httpServletResponse).flushBuffer();
@@ -74,7 +60,6 @@ class JwtAuthenticationSuccessHandlerTest {
         // given
         givenAccessToken();
         givenRefreshToken();
-        when(httpServletResponse.getWriter()).thenReturn(writer);
         doThrow(IOException.class).when(objectMapper).writeValue(eq(writer), any());
 
         // when
@@ -96,10 +81,10 @@ class JwtAuthenticationSuccessHandlerTest {
     }
 
     private void givenAccessToken() {
-        when(tokenProvider.createAccessToken(authentication)).thenReturn(givenToken());
+        given(tokenProvider.createAccessToken(authentication)).willReturn(givenToken());
     }
 
     private void givenRefreshToken() {
-        when(tokenProvider.createRefreshToken(authentication)).thenReturn(givenToken());
+        given(tokenProvider.createRefreshToken(authentication)).willReturn(givenToken());
     }
 }
