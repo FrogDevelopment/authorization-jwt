@@ -5,6 +5,7 @@ import fr.frogdevelopment.authentication.jwt.filter.JwtProcessTokenFilter;
 import fr.frogdevelopment.authentication.jwt.handler.JwtAuthenticationFailureHandler;
 import fr.frogdevelopment.authentication.jwt.handler.JwtAuthenticationLogoutSuccessHandler;
 import fr.frogdevelopment.authentication.jwt.handler.JwtAuthenticationSuccessHandler;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.http.HttpMethod;
@@ -13,7 +14,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 public abstract class JwtSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
@@ -63,7 +66,12 @@ public abstract class JwtSecurityConfigurerAdapter extends WebSecurityConfigurer
     protected final void configureLogout(HttpSecurity http) throws Exception {
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_ENTRY_POINT, HttpMethod.POST.name()))
-                .logoutSuccessHandler(logoutSuccessHandler);
+                .logoutSuccessHandler(getLogoutSuccessHandler());
+    }
+
+    @NotNull
+    private LogoutSuccessHandler getLogoutSuccessHandler() {
+        return logoutSuccessHandler != null ? logoutSuccessHandler : new HttpStatusReturningLogoutSuccessHandler();
     }
 
     protected final void configureLogin(HttpSecurity http) throws Exception {

@@ -1,6 +1,7 @@
 package fr.frogdevelopment.authentication.jwt;
 
 import fr.frogdevelopment.authentication.jwt.endpoint.RefreshTokenEndpoint;
+import fr.frogdevelopment.authentication.jwt.handler.JwtAuthenticationLogoutSuccessHandler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,13 @@ public class JwtAutoConfiguration {
                                               TokenProvider tokenProvider,
                                               UserDetailsService userDetailsService) {
         return new RefreshTokenEndpoint(jwtParser, tokenProvider, userDetailsService);
+    }
+
+    @Bean
+    @ConditionalOnBean({JwtUserDetailsService.class})
+    JwtAuthenticationLogoutSuccessHandler jwtAuthenticationLogoutSuccessHandler(JwtParser jwtParser,
+                                                                                JwtUserDetailsService jwtUserDetailsService) {
+        return new JwtAuthenticationLogoutSuccessHandler(jwtParser, jwtUserDetailsService);
     }
 
 }
