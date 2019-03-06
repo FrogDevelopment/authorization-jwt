@@ -1,13 +1,8 @@
 spring:
   application:
-    name: jwt-authentication
-  main:
-    banner-mode: 'off'
-  datasource:
-    driver-class-name: org.sqlite.JDBC
-    url: "jdbc:sqlite::memory:"
+    name: jwt-authorization
 
 security:
   jwt:
     token:
-      secret-key: "secret-key"
+      signing-key: "signing-key"

@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=fr.frogdevelopment.authentication.jwt.JwtAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=fr.frogdevelopment.jwt.JwtAuthorizationAutoConfiguration

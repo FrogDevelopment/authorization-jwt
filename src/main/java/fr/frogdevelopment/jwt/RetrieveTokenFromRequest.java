@@ -1,17 +1,17 @@
-package fr.frogdevelopment.authentication.jwt;
+package fr.frogdevelopment.jwt;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import javax.servlet.http.HttpServletRequest;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.stereotype.Component;
+import org.jetbrains.annotations.Nullable;
 
-@Component
-class RequestParser {
+public class RetrieveTokenFromRequest {
 
-    static final String TOKEN_TYPE = "Bearer ";
+    public static final String TOKEN_TYPE = "Bearer ";
 
-    String retrieveToken(@NotNull HttpServletRequest request) {
+    @Nullable
+    public String call(@NotNull HttpServletRequest request) {
         var bearer = request.getHeader(AUTHORIZATION);
         if (bearer == null || !bearer.startsWith(TOKEN_TYPE)) {
             return null;

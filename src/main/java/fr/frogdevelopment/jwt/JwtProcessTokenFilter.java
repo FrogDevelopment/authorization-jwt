@@ -1,6 +1,5 @@
-package fr.frogdevelopment.authentication.jwt.filter;
+package fr.frogdevelopment.jwt;
 
-import fr.frogdevelopment.authentication.jwt.JwtParser;
 import io.jsonwebtoken.JwtException;
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -16,32 +15,30 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 public class JwtProcessTokenFilter extends OncePerRequestFilter {
 
-    private final JwtParser jwtParser;
+    private final ResolveTokenToAuthentication resolveTokenToAuthentication;
 
-    public JwtProcessTokenFilter(JwtParser jwtParser) {
-        this.jwtParser = jwtParser;
+    JwtProcessTokenFilter(ResolveTokenToAuthentication resolveTokenToAuthentication) {
+        this.resolveTokenToAuthentication = resolveTokenToAuthentication;
     }
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
-        setTokenOnSpringSecurityContext(request);
+        resolveTokenAndSetAuthenticationOnSpringSecurityContext(request);
 
         // go to the next filter in the filter chain
         filterChain.doFilter(request, response);
     }
 
-    void setTokenOnSpringSecurityContext(@NonNull HttpServletRequest request) {
+    private void resolveTokenAndSetAuthenticationOnSpringSecurityContext(@NonNull HttpServletRequest request) {
         try {
-            // resolve && parsing token
-            Authentication authentication = jwtParser.createAuthentication(request);
+            Authentication authentication = resolveTokenToAuthentication.call(request);
 
             if (authentication != null) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (JwtException ex) {
             log.error("Error while trying to resolve token", ex);
-            // In case of failure. Make sure it's clear; so guarantee user won't be authenticated
             SecurityContextHolder.clearContext();
         }
     }

@@ -1,4 +1,4 @@
-package fr.frogdevelopment.authentication.jwt;
+package fr.frogdevelopment.jwt;
 
 import java.util.Collection;
 import org.springframework.security.authentication.AbstractAuthenticationToken;

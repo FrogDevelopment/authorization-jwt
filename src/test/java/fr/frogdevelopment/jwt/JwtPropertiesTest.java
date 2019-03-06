@@ -1,4 +1,4 @@
-package fr.frogdevelopment.authentication.jwt;
+package fr.frogdevelopment.jwt;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -11,8 +11,7 @@ class JwtPropertiesTest {
     void shouldThrowExceptionWhenMissingSecretKeyParameter() {
         JwtProperties properties = new JwtProperties();
 
-        assertThrows(InvalidParameterException.class, properties::init,
-                "security.jwt.token.secret-key required !!");
+        assertThrows(InvalidParameterException.class, properties::init, "security.jwt.token.signing-key required !!");
     }
 
 }

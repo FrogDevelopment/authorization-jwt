@@ -1,6 +1,6 @@
-package fr.frogdevelopment.authentication.jwt;
+package fr.frogdevelopment.jwt;
 
-import static fr.frogdevelopment.authentication.jwt.RequestParser.TOKEN_TYPE;
+import static fr.frogdevelopment.jwt.RetrieveTokenFromRequest.TOKEN_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -11,13 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("test")
 @RunWith(JUnitPlatform.class)
-class RequestParserTest {
+class RetrieveTokenFromRequestTest {
 
-    private RequestParser requestParser = new RequestParser();
+    private RetrieveTokenFromRequest retrieveTokenFromRequest = new RetrieveTokenFromRequest();
 
     @Test
     void should_return_null_when_missing_authorization() {
@@ -26,7 +24,7 @@ class RequestParserTest {
         request.addHeader("BAD HEADER", UUID.randomUUID().toString());
 
         // when
-        String token = requestParser.retrieveToken(request);
+        String token = retrieveTokenFromRequest.call(request);
 
         // then
         assertNull(token);
@@ -39,7 +37,7 @@ class RequestParserTest {
         request.addHeader(AUTHORIZATION, "WRONG TOKEN");
 
         // when
-        String token = requestParser.retrieveToken(request);
+        String token = retrieveTokenFromRequest.call(request);
 
         // then
         assertNull(token);
@@ -54,7 +52,7 @@ class RequestParserTest {
         request.addHeader(AUTHORIZATION, TOKEN_TYPE + uuid);
 
         // when
-        String token = requestParser.retrieveToken(request);
+        String token = retrieveTokenFromRequest.call(request);
 
         // then
         assertNotNull(token);
