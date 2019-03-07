@@ -33,7 +33,7 @@ public abstract class JwtAuthorizationConfigurerAdapter extends WebSecurityConfi
 
         // Entry points
         http.authorizeRequests()
-                // allow access to actuator health endpoint
+                // allow access to actuator health api
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll();
     }
 }
