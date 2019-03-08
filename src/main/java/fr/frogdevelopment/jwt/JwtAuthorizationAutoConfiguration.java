@@ -3,9 +3,7 @@ package fr.frogdevelopment.jwt;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.context.annotation.RequestScope;
 
-@RequestScope
 @Configuration
 public class JwtAuthorizationAutoConfiguration {
 
