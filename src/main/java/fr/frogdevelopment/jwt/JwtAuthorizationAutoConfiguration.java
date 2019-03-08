@@ -1,16 +1,18 @@
 package fr.frogdevelopment.jwt;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.annotation.RequestScope;
 
+@RequestScope
 @Configuration
 public class JwtAuthorizationAutoConfiguration {
 
-    @Bean
-    @ConfigurationProperties("security.jwt.token")
-    JwtProperties jwtProperties() {
-        return new JwtProperties();
+    private final String signingKey;
+
+    public JwtAuthorizationAutoConfiguration(@Value("${security.jwt.token.signing-key}") String signingKey) {
+        this.signingKey = signingKey;
     }
 
     @Bean
@@ -20,7 +22,7 @@ public class JwtAuthorizationAutoConfiguration {
 
     @Bean
     ResolveClaimsFromToken resolveClaimsFromToken() {
-        return new ResolveClaimsFromToken(jwtProperties());
+        return new ResolveClaimsFromToken(signingKey);
     }
 
     @Bean

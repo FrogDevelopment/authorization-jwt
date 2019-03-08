@@ -1,5 +1,6 @@
 package fr.frogdevelopment.jwt;
 
+import static fr.frogdevelopment.jwt.ResolveTokenToAuthentication.AUTHORITIES_KEY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -68,7 +69,7 @@ class ResolveTokenToAuthenticationTest {
     private String givenToken() {
         return Jwts.builder()
                 .setSubject(USERNAME)
-                .addClaims(Map.of(JwtProperties.AUTHORITIES_KEY, ROLES))
+                .addClaims(Map.of(AUTHORITIES_KEY, ROLES))
                 .signWith(SignatureAlgorithm.HS512, SIGNING_KEY)
                 .compact();
     }

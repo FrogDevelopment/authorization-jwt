@@ -5,21 +5,20 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import org.jetbrains.annotations.NotNull;
 
-public class ResolveClaimsFromToken {
+class ResolveClaimsFromToken {
 
-    private final JwtProperties jwtProperties;
+    private final String signingKey;
 
-    public ResolveClaimsFromToken(JwtProperties jwtProperties) {
-        this.jwtProperties = jwtProperties;
+    ResolveClaimsFromToken(String signingKey) {
+        this.signingKey = signingKey;
     }
 
     /**
      * @see JwtParser#parseClaimsJws(String)
      */
-    @NotNull
-    public Claims call(@NotNull String token) {
+    @NotNull Claims call(@NotNull String token) {
         return Jwts.parser()
-                .setSigningKey(jwtProperties.getSigningKey().getBytes())
+                .setSigningKey(signingKey.getBytes())
                 .parseClaimsJws(token)
                 .getBody();
     }
