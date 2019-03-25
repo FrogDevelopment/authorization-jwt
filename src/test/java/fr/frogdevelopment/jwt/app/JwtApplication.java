@@ -1,4 +1,4 @@
-package fr.frogdevelopment.jwt;
+package fr.frogdevelopment.jwt.app;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
