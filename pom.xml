@@ -25,6 +25,14 @@
         <spring-security.version>5.1.4.RELEASE</spring-security.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>frog-repo</id>
+            <name>FrogDevelopment Repository</name>
+            <url>http://nexus.frog-development.com/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
