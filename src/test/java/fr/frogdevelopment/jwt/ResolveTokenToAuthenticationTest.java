@@ -12,7 +12,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+@Tag("unitTest")
 @ExtendWith(MockitoExtension.class)
 class ResolveTokenToAuthenticationTest {
 
@@ -52,7 +53,6 @@ class ResolveTokenToAuthenticationTest {
         assertEquals(authentication.getAuthorities(), authorities);
     }
 
-    @NotNull
     private MockHttpServletRequest givenRequest() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         given(retrieveTokenFromRequest.call(request)).willReturn(givenToken());

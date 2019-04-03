@@ -7,11 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import java.util.UUID;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 import org.springframework.mock.web.MockHttpServletRequest;
 
+@Tag("unitTest")
 @RunWith(JUnitPlatform.class)
 class RetrieveTokenFromRequestTest {
 
