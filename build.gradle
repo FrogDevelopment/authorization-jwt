@@ -20,7 +20,7 @@ tasks.withType(JavaCompile) {
 repositories {
     mavenLocal()
     maven {
-        url = 'http://nexus.frog-development.com/repository/maven-public/'
+        url = "$nexusUrl/maven-public/"
     }
 }
 
@@ -82,8 +82,13 @@ publishing {
 
     repositories {
         maven {
-            def releasesRepoUrl = "http://nexus.frog-development.com/repository/maven-releases"
-            def snapshotsRepoUrl = "http://nexus.frog-development.com/repository/maven-snapshots"
+            credentials {
+                username nexusUser
+                password nexusPassword
+            }
+
+            def releasesRepoUrl = "$nexusUrl/maven-releases/"
+            def snapshotsRepoUrl = "$nexusUrl/maven-snapshots/"
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
         }
     }
