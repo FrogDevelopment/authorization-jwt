@@ -83,7 +83,7 @@ publishing {
     repositories {
         maven {
             credentials {
-                username nexusUser
+                username nexusUsername
                 password nexusPassword
             }
 
