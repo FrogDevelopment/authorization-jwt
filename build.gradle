@@ -3,6 +3,7 @@ plugins {
     id 'maven-publish'
     id 'io.freefair.lombok' version '3.2.0'
     id 'jacoco'
+    id "org.sonarqube" version "2.7"
 }
 
 group = 'fr.frogdevelopment.module'
