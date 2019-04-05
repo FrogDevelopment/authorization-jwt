@@ -3,11 +3,11 @@ plugins {
     id 'maven-publish'
     id 'io.freefair.lombok' version '3.2.0'
     id 'jacoco'
-    id "org.sonarqube" version "2.7"
+    id 'org.sonarqube' version '2.7'
+    id 'fr.brouillard.oss.gradle.jgitver' version '0.7.0'
 }
 
 group = 'fr.frogdevelopment.module'
-version = '0.0.1-SNAPSHOT'
 description = 'authorization-jwt-module'
 
 sourceCompatibility = JavaVersion.VERSION_11
