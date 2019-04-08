@@ -55,10 +55,6 @@ test {
     }
 }
 
-jacoco {
-    toolVersion = "0.8.3"
-}
-
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
     archiveClassifier = 'sources'
@@ -86,9 +82,7 @@ publishing {
 
             def releasesRepoUrl = "$nexusUrl/maven-releases/"
             def snapshotsRepoUrl = "$nexusUrl/maven-snapshots/"
-            println("version: ${version}")
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-            println("url: ${url}")
         }
     }
 }
