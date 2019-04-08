@@ -4,7 +4,7 @@ plugins {
     id 'io.freefair.lombok' version '3.2.0'
     id 'jacoco'
     id 'org.sonarqube' version '2.7'
-//    id 'fr.brouillard.oss.gradle.jgitver' version '0.7.0'
+    id 'fr.brouillard.oss.gradle.jgitver' version '0.7.0'
 }
 
 group = 'fr.frogdevelopment.module'
