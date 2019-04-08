@@ -13,10 +13,6 @@ description = 'authorization-jwt-module'
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
 repositories {
     mavenLocal()
     maven {
@@ -44,6 +40,10 @@ dependencies {
     testImplementation 'org.mockito:mockito-junit-jupiter:2.25.0'
     
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.0'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 test {
