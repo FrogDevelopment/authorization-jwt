@@ -59,6 +59,23 @@ test {
     }
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        xml.destination file("${buildDir}/reports/jacoco/test.xml")
+        csv.enabled false
+        html.enabled false
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test.xml"
+    }
+}
+
+project.tasks["sonarqube"].dependsOn "jacocoTestReport"
+
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
     archiveClassifier = 'sources'
