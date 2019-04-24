@@ -10,6 +10,3 @@ Authorization JWT for Frog Development Micro-services
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=FrogDevelopment_authorization-jwt-module&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=FrogDevelopment_authorization-jwt-module)  
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=FrogDevelopment_authorization-jwt-module&metric=coverage)](https://sonarcloud.io/dashboard?id=FrogDevelopment_authorization-jwt-module)  
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=FrogDevelopment_authorization-jwt-module&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=FrogDevelopment_authorization-jwt-module)  
-
-## Jipack
-[![](https://jitpack.io/v/FrogDevelopment/authorization-jwt-module.svg)](https://jitpack.io/#FrogDevelopment/authorization-jwt-module)  
