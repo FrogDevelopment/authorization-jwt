@@ -16,7 +16,7 @@ targetCompatibility = JavaVersion.VERSION_11
 repositories {
     mavenLocal()
     maven {
-        url = "$nexusUrl/maven-public/"
+        url = "$repoUrl/maven-public/"
     }
 }
 
@@ -93,12 +93,12 @@ publishing {
     repositories {
         maven {
             credentials {
-                username nexusUsername
-                password nexusPassword
+                username repoUsername
+                password repoPassword
             }
             afterEvaluate {
-                def releasesRepoUrl = "$nexusUrl/maven-releases/"
-                def snapshotsRepoUrl = "$nexusUrl/maven-snapshots/"
+                def releasesRepoUrl = "$repoUrl/maven-releases/"
+                def snapshotsRepoUrl = "$repoUrl/maven-snapshots/"
                 url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
             }
         }
