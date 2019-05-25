@@ -99,7 +99,7 @@ publishing {
             afterEvaluate {
                 def releasesRepoUrl = "$repoUrl/maven-releases/"
                 def snapshotsRepoUrl = "$repoUrl/maven-snapshots/"
-                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                url = version?.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
             }
         }
     }
