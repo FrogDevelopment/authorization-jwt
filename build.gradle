@@ -97,8 +97,8 @@ publishing {
                 password repoPassword
             }
             afterEvaluate {
-                def releasesRepoUrl = "$repoUrl/lib-releases/"
-                def snapshotsRepoUrl = "$repoUrl/lib-snapshots/"
+                def releasesRepoUrl = "$repoUrl/lib-releases-local/"
+                def snapshotsRepoUrl = "$repoUrl/lib-snapshots-local/"
                 url = version?.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
             }
         }
