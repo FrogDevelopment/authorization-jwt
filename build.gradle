@@ -107,8 +107,10 @@ publishing {
 }
 
 artifactory {
+    contextUrl = repoUrl
+    clientConfig.setIncludeEnvVars(true)
+
     publish {
-        contextUrl = repoUrl
         repository {
             afterEvaluate {
                 repoKey = version?.endsWith('SNAPSHOT') ? 'libs-snapshot-local' : 'libs-release-local'
@@ -119,9 +121,7 @@ artifactory {
 
         defaults {
             publications('maven')
+            publishArtifacts = true
         }
     }
-
-    // Redefine basic properties of the build info object
-    clientConfig.setIncludeEnvVars(true)
 }
