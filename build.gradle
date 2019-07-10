@@ -110,7 +110,9 @@ artifactory {
     publish {
         contextUrl = repoUrl
         repository {
-            repoKey = version?.endsWith('SNAPSHOT') ? 'libs-snapshot-local' : 'libs-release-local'
+            afterEvaluate {
+                repoKey = version?.endsWith('SNAPSHOT') ? 'libs-snapshot-local' : 'libs-release-local'
+            }
             username = repoUsername
             password = repoPassword
         }
