@@ -2,7 +2,7 @@
 Authorization JWT for Frog Development Micro-services
 
 ## Version 
-![version](https://img.shields.io/badge/version-0.1.0-blue.svg?cacheSeconds=2592000)
+![version](https://img.shields.io/badge/version-0.2.0-blue.svg?cacheSeconds=2592000)
 
 ## Jenkins  
 [![Build Status](http://jenkins.frog-development.com/buildStatus/icon?job=Modules%2Fauthorization-jwt-module%2Fmaster)](http://jenkins.frog-development.com/job/Modules/job/authorization-jwt-module/job/master/)
