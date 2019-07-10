@@ -90,38 +90,16 @@ publishing {
             artifact sourcesJar
         }
     }
-
-//    repositories {
-//        maven {
-//            credentials {
-//                username repoUsername
-//                password repoPassword
-//            }
-//            afterEvaluate {
-//                def releasesRepoUrl = "$repoUrl/libs-release-local/"
-//                def snapshotsRepoUrl = "$repoUrl/libs-snapshot-local/"
-//                url = version?.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-//            }
-//        }
-//    }
-}
-
-artifactory {
-    contextUrl = repoUrl
-    clientConfig.setIncludeEnvVars(true)
-
-    publish {
-        repository {
-            afterEvaluate {
-                repoKey = version?.endsWith('SNAPSHOT') ? 'libs-snapshot-local' : 'libs-release-local'
-            }
-            username = repoUsername
-            password = repoPassword
-        }
-    }
 }
 
 artifactoryPublish {
+    afterEvaluate {
+        clientConfig.publisher.repoKey = version?.endsWith('SNAPSHOT') ? 'libs-snapshot-local' : 'libs-release-local'
+    }
+    clientConfig.publisher.contextUrl = repoUrl
+    clientConfig.publisher.username = repoUsername
+    clientConfig.publisher.password = repoPassword
+    clientConfig.setIncludeEnvVars(true)
+
     publications('maven')
-    publishArtifacts = true
 }
