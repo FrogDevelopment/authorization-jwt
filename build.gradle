@@ -1,9 +1,10 @@
 plugins {
+    id 'jacoco'
     id 'java-library'
     id 'maven-publish'
-    id 'io.freefair.lombok' version '3.2.0'
-    id 'jacoco'
     id 'org.sonarqube' version '2.7.1'
+    id 'io.freefair.lombok' version '3.2.0'
+    id 'com.jfrog.artifactory' version '4.9.7'
     id 'fr.brouillard.oss.gradle.jgitver' version '0.9.1'
 }
 
@@ -16,7 +17,7 @@ targetCompatibility = JavaVersion.VERSION_11
 repositories {
     mavenLocal()
     maven {
-        url = "$repoUrl/libs-public/"
+        url = "$repoUrl/libs-public"
     }
 }
 
@@ -90,17 +91,35 @@ publishing {
         }
     }
 
-    repositories {
-        maven {
-            credentials {
-                username repoUsername
-                password repoPassword
-            }
-            afterEvaluate {
-                def releasesRepoUrl = "$repoUrl/libs-release-local/"
-                def snapshotsRepoUrl = "$repoUrl/libs-snapshot-local/"
-                url = version?.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-            }
+//    repositories {
+//        maven {
+//            credentials {
+//                username repoUsername
+//                password repoPassword
+//            }
+//            afterEvaluate {
+//                def releasesRepoUrl = "$repoUrl/libs-release-local/"
+//                def snapshotsRepoUrl = "$repoUrl/libs-snapshot-local/"
+//                url = version?.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+//            }
+//        }
+//    }
+}
+
+artifactory {
+    publish {
+        contextUrl = repoUrl
+        repository {
+            repoKey = version?.endsWith('SNAPSHOT') ? 'libs-snapshot-local' : 'libs-release-local'
+            username = repoUsername
+            password = repoPassword
+        }
+
+        defaults {
+            publications('maven')
         }
     }
+
+    // Redefine basic properties of the build info object
+    clientConfig.setIncludeEnvVars(true)
 }
