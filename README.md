@@ -4,8 +4,8 @@ Authorization JWT for Frog Development Micro-services
 ## Version 
 ![version](https://img.shields.io/badge/version-0.2.0-blue.svg?cacheSeconds=2592000)
 
-## Jenkins  
-[![Build Status](http://jenkins.frog-development.com/buildStatus/icon?job=Modules%2Fauthorization-jwt-module%2Fmaster)](http://jenkins.frog-development.com/job/Modules/job/authorization-jwt-module/job/master/)
+## Workflow Actions
+![](https://github.com/FrogDevelopment/authorization-jwt-module/actions/workflows/Java%20CI/badge.svg)  
 
 ## Sonar Cloud  
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=FrogDevelopment_authorization-jwt-module&metric=alert_status)](https://sonarcloud.io/dashboard?id=FrogDevelopment_authorization-jwt-module)  
