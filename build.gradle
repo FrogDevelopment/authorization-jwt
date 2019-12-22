@@ -76,6 +76,9 @@ jacocoTestReport {
 sonarqube {
     properties {
         property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test.xml"
+        property "sonar.projectKey", "FrogDevelopment_authorization-jwt-module"
+        property "sonar.organization", "frogdevelopment"
+        property "sonar.host.url", "https://sonarcloud.io"
     }
 }
 

@@ -1,6 +1,9 @@
-name: Java CI
+name: Analyse
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -9,6 +12,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+      - name: Prepare repository
+        run: git checkout "${GITHUB_REF:11}"
       - name: Setup Java environment based on AdoptOpenJDK
         uses: joschi/setup-jdk@v1.0.0
         with:
@@ -18,5 +23,5 @@ jobs:
         run: ./gradlew classes
       - name: Test
         run: ./gradlew test
-      - name: Publish
-        run: ./gradlew artifactoryPublish -Djgitver.branch=${GITHUB_REF##*/} -PrepoUsername=${{ secrets.REPO_USR }} -PrepoPassword=${{ secrets.REPO_PSW }}
+      - name: Analyse
+        run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONAR_LOGIN }}
