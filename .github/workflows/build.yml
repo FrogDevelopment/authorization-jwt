@@ -1,9 +1,11 @@
-name: Analyse
+name: Java CI
 
 on:
   push:
     branches:
-      - master
+      - '**'
+    tags-ignore:
+      - '**'
 
 jobs:
   build:
@@ -24,6 +26,9 @@ jobs:
       - name: Test
         run: ./gradlew test
       - name: Analyse
-        run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONAR_LOGIN }}
+        if: github.ref == 'refs/heads/master'
+        run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONAR_LOGIN }} -Djgitver.branch=${GITHUB_REF:11}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish
+        run: ./gradlew artifactoryPublish -Djgitver.branch=${GITHUB_REF:11} -PrepoUsername=${{ secrets.REPO_USR }} -PrepoPassword=${{ secrets.REPO_PSW }}
