@@ -21,8 +21,8 @@ jobs:
       - name: Test
         run: ./gradlew test
        - name: Analyse
-       if: github.ref == 'refs/heads/master'
-       run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONAR_LOGIN }}
+#       if: github.ref == 'refs/heads/master'
+       run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONAR_LOGIN }} -Djgitver.branch=${GITHUB_REF:11}
        env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish
