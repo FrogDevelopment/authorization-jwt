@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Slf4j
 public abstract class JwtAuthorizationConfigurerAdapter extends WebSecurityConfigurerAdapter {
@@ -30,7 +30,7 @@ public abstract class JwtAuthorizationConfigurerAdapter extends WebSecurityConfi
         http.exceptionHandling().authenticationEntryPoint(handleAuthenticationException());
 
         // Apply JWT
-        http.addFilterBefore(jwtProcessTokenFilter, LogoutFilter.class);
+        http.addFilterBefore(jwtProcessTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         // Entry points
         http.authorizeRequests()
