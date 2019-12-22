@@ -96,6 +96,10 @@ publishing {
     }
 }
 
+jar {
+    enabled true
+}
+
 artifactoryPublish {
     afterEvaluate {
         clientConfig.publisher.repoKey = version?.endsWith('SNAPSHOT') ? 'libs-snapshot-local' : 'libs-release-local'

@@ -19,4 +19,4 @@ jobs:
       - name: Test
         run: ./gradlew test
       - name: Publish
-        run: ./gradlew jar artifactoryPublish -Djgitver.branch=${GITHUB_REF##*/} -PrepoUsername=${{ secrets.REPO_USR }} -PrepoPassword=${{ secrets.REPO_PSW }}
+        run: ./gradlew artifactoryPublish -Djgitver.branch=${GITHUB_REF##*/} -PrepoUsername=${{ secrets.REPO_USR }} -PrepoPassword=${{ secrets.REPO_PSW }}
