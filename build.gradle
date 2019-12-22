@@ -6,6 +6,8 @@ plugins {
     id 'io.freefair.lombok' version '4.1.6'
     id 'com.jfrog.artifactory' version '4.9.7'
     id 'fr.brouillard.oss.gradle.jgitver' version '0.9.1'
+    id 'org.springframework.boot' version '2.2.0.RELEASE'
+    id 'io.spring.dependency-management' version "1.0.8.RELEASE"
 }
 
 group = 'fr.frogdevelopment.module'
@@ -21,31 +23,28 @@ repositories {
     }
 }
 
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Hoxton.RELEASE"
+    }
+}
+
 dependencies {
     def jwtVersion = '0.9.1'
-    def springBootVersion = '2.2.0.RELEASE'
-    def springSecurityVersion = '5.1.5.RELEASE'
-    def junitVersion = '5.5.2'
 
     api "io.jsonwebtoken:jjwt:$jwtVersion"
 
-    implementation "org.springframework.boot:spring-boot:$springBootVersion"
-    implementation "org.springframework.security:spring-security-config:$springSecurityVersion"
-    implementation "org.springframework.security:spring-security-web:$springSecurityVersion"
-    implementation "org.springframework.boot:spring-boot-actuator-autoconfigure:$springBootVersion"
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-actuator-autoconfigure'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
     implementation 'javax.servlet:javax.servlet-api:4.0.0'
     implementation 'javax.xml.bind:jaxb-api:2.3.0'
 
     compileOnly 'org.jetbrains:annotations:18.0.0'
 
-    testImplementation 'org.assertj:assertj-core:3.14.0'
-    testImplementation "org.springframework.security:spring-security-test:$springSecurityVersion"
-    testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
-    testImplementation 'org.junit.platform:junit-platform-runner:1.5.2'
-    testImplementation 'org.mockito:mockito-junit-jupiter:3.2.0'
-
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.junit.platform:junit-platform-runner'
 }
 
 tasks.withType(JavaCompile) {
