@@ -16,8 +16,6 @@ jobs:
         run: git checkout "${GITHUB_REF:11}"
       - name: Setup Java environment based on AdoptOpenJDK
         uses: joschi/setup-jdk@v1.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           java-version: openjdk11
           openjdk_impl: openj9
@@ -27,3 +25,5 @@ jobs:
         run: ./gradlew test
       - name: Analyse
         run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONAR_LOGIN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
