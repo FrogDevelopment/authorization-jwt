@@ -7,7 +7,7 @@ plugins {
     id 'com.jfrog.artifactory' version '4.9.7'
     id 'fr.brouillard.oss.gradle.jgitver' version '0.9.1'
     id 'org.springframework.boot' version '2.2.0.RELEASE'
-    id 'io.spring.dependency-management' version "1.0.8.RELEASE"
+    id 'io.spring.dependency-management' version "1.0.9.RELEASE"
 }
 
 group = 'fr.frogdevelopment.module'
