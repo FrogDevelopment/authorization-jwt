@@ -3,7 +3,7 @@ name: Java CI
 on:
   push:
     branches:
-      - '**'
+      - 'master'
     tags-ignore:
       - '**'
 
@@ -30,5 +30,3 @@ jobs:
         run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONAR_LOGIN }} -Djgitver.branch=${GITHUB_REF:11}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Publish
-        run: ./gradlew artifactoryPublish -Djgitver.branch=${GITHUB_REF:11} -PrepoUsername=${{ secrets.REPO_USR }} -PrepoPassword=${{ secrets.REPO_PSW }}
