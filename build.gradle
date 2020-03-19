@@ -9,7 +9,7 @@ plugins {
     id 'io.spring.dependency-management' version "1.0.9.RELEASE"
 }
 
-group = 'fr.frogdevelopment.module'
+group = 'com.frog-development.module'
 description = 'authorization-jwt-module'
 
 sourceCompatibility = JavaVersion.VERSION_11
