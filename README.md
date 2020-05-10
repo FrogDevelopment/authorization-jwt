@@ -3,9 +3,9 @@
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=FrogDevelopment_authorization-jwt-module&metric=alert_status)](https://sonarcloud.io/dashboard?id=FrogDevelopment_authorization-jwt-module)  
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=FrogDevelopment_authorization-jwt-module&metric=security_rating)](https://sonarcloud.io/dashboard?id=FrogDevelopment_authorization-jwt-module)  
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=FrogDevelopment_authorization-jwt-module&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=FrogDevelopment_authorization-jwt-module)  
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=FrogDevelopment_authorization-jwt-module&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=FrogDevelopment_authorization-jwt-module)  
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=FrogDevelopment_authorization-jwt-module&metric=coverage)](https://sonarcloud.io/dashboard?id=FrogDevelopment_authorization-jwt-module)  
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=FrogDevelopment_authorization-jwt-module&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=FrogDevelopment_authorization-jwt-module)  
 
 
 ### How to use the authorization-jwt-module on your project
