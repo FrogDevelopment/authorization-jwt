@@ -4,6 +4,7 @@ import static fr.frogdevelopment.jwt.JwtAuthenticationToken.AUTHORITIES_KEY;
 
 import fr.frogdevelopment.jwt.JwtAuthenticationToken;
 import io.jsonwebtoken.impl.DefaultClaims;
+import java.util.Arrays;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
@@ -18,7 +19,7 @@ public final class WithMockJwtUserSecurityContextFactory implements WithSecurity
 
         var claims = new DefaultClaims();
         claims.setSubject(withUser.username());
-        claims.put(AUTHORITIES_KEY, withUser.roles());
+        claims.put(AUTHORITIES_KEY, Arrays.asList(withUser.roles()));
         for (var claim : withUser.claims()) {
             claims.put(claim.name(), claim.value());
         }
