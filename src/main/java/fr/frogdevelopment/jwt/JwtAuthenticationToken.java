@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,13 +19,21 @@ public class JwtAuthenticationToken implements Authentication {
 
     static final String AUTHORITIES_KEY = "authorities";
 
+    @Getter
     private final String principal;
+    @Getter
+    private final String name;
+    @Getter
     private final Collection<GrantedAuthority> authorities;
+    @Getter
     private final Map<String, Object> details;
+    @Getter
+    @Setter
     private boolean authenticated;
 
-    JwtAuthenticationToken(Claims claims) {
+    public JwtAuthenticationToken(Claims claims) {
         this.principal = claims.getSubject();
+        this.name = claims.getSubject();
         //noinspection unchecked
         this.authorities = ((List<String>) claims.getOrDefault(AUTHORITIES_KEY, emptyList()))
                 .stream()
@@ -35,38 +45,8 @@ public class JwtAuthenticationToken implements Authentication {
         this.authenticated = true;
     }
 
-    @Override
-    public String getPrincipal() {
-        return principal;
-    }
-
-    @Override
-    public String getName() {
-        return getPrincipal();
-    }
-
-    @Override
-    public Collection<GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
-    @Override
-    public Map<String, Object> getDetails() {
-        return details;
-    }
-
     public Object getDetail(String key) {
         return details.get(key);
-    }
-
-    @Override
-    public boolean isAuthenticated() {
-        return authenticated;
-    }
-
-    @Override
-    public void setAuthenticated(boolean authenticated) {
-        this.authenticated = authenticated;
     }
 
     @Override
