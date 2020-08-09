@@ -17,7 +17,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 public class JwtAuthenticationToken implements Authentication {
 
-    static final String AUTHORITIES_KEY = "authorities";
+    public static final String AUTHORITIES_KEY = "authorities";
 
     @Getter
     private final String principal;
