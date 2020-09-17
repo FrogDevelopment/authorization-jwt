@@ -41,6 +41,7 @@ public class JwtAuthenticationToken implements Authentication {
                 .collect(toUnmodifiableList());
         this.details = claims.entrySet()
                 .stream()
+                .filter(entry -> !AUTHORITIES_KEY.equals(entry.getKey()))
                 .collect(toUnmodifiableMap(Entry::getKey, Entry::getValue));
         this.authenticated = true;
     }
