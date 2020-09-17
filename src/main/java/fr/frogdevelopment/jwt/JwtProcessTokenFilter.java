@@ -34,7 +34,7 @@ public class JwtProcessTokenFilter extends OncePerRequestFilter {
         try {
             log.debug("Resolve token and set authentication on Spring Security Context for request {}",
                     request.getRequestURL());
-            Authentication authentication = resolveTokenToAuthentication.call(request);
+            var authentication = resolveTokenToAuthentication.call(request);
 
             if (authentication != null) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);

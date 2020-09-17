@@ -1,9 +1,10 @@
 package fr.frogdevelopment.jwt;
 
-import static fr.frogdevelopment.jwt.ResolveTokenToAuthentication.AUTHORITIES_KEY;
+import static fr.frogdevelopment.jwt.JwtAuthenticationToken.AUTHORITIES_KEY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
@@ -48,6 +49,9 @@ class ResolveTokenToAuthenticationTest {
         // then
         assertNotNull(authentication);
         assertEquals(USERNAME, authentication.getPrincipal());
+        assertEquals(USERNAME, authentication.getName());
+        assertNotNull(authentication.getDetails());
+        assertTrue(authentication.isAuthenticated());
         assertNull(authentication.getCredentials());
         var authorities = ROLES.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         assertEquals(authentication.getAuthorities(), authorities);
