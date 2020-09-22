@@ -24,7 +24,7 @@ class ResolveTokenToAuthentication {
 
         var claims = resolveClaimsFromToken.call(token);
 
-        return new JwtAuthenticationToken(claims);
+        return new JwtAuthenticationToken(claims, token);
     }
 
 }

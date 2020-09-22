@@ -21,6 +21,8 @@ public @interface WithMockJwtUser {
 
     String[] roles() default { "USER" };
 
+    String token() default "";
+
     Claim[] claims() default {};
 
     @AliasFor(annotation = WithSecurityContext.class)

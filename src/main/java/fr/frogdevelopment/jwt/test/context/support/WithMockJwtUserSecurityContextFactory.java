@@ -34,7 +34,7 @@ public final class WithMockJwtUserSecurityContextFactory implements WithSecurity
         }
 
         var context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(new JwtAuthenticationToken(claims));
+        context.setAuthentication(new JwtAuthenticationToken(claims, withUser.token()));
         return context;
     }
 }

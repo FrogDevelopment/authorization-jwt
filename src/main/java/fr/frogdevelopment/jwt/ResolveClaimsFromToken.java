@@ -19,6 +19,7 @@ public class ResolveClaimsFromToken {
     @NotNull
     public Claims call(@NotNull String token) {
         return Jwts.parser()
+                .setAllowedClockSkewSeconds(5)
                 .setSigningKey(signingKey.getBytes())
                 .parseClaimsJws(token)
                 .getBody();

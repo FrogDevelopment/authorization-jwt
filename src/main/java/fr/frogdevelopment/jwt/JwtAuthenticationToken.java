@@ -30,8 +30,11 @@ public class JwtAuthenticationToken implements Authentication {
     @Getter
     @Setter
     private boolean authenticated;
+    @Getter
+    private String tokenString;
 
-    public JwtAuthenticationToken(Claims claims) {
+    public JwtAuthenticationToken(Claims claims, String token) {
+        this.tokenString = token;
         this.principal = claims.getSubject();
         this.name = claims.getSubject();
         //noinspection unchecked
