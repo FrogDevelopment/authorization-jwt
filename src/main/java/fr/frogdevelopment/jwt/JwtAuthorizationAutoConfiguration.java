@@ -24,12 +24,11 @@ public class JwtAuthorizationAutoConfiguration {
     }
 
     @Bean
-    ResolveTokenToAuthentication resolveTokenToAuthentication() {
-        return new ResolveTokenToAuthentication(resolveClaimsFromToken(), retrieveTokenFromRequest());
+    TokenToAuthentication tokenToAuthentication() {
+        return new TokenToAuthentication(resolveClaimsFromToken());
     }
-
     @Bean
-    JwtProcessTokenFilter jwtProcessTokenFilter() {
-        return new JwtProcessTokenFilter(resolveTokenToAuthentication());
+    ResolveTokenToAuthentication resolveTokenToAuthentication() {
+        return new ResolveTokenToAuthentication(retrieveTokenFromRequest(), tokenToAuthentication());
     }
 }

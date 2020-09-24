@@ -2,32 +2,52 @@ package fr.frogdevelopment.jwt;
 
 import io.jsonwebtoken.JwtException;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Slf4j
 public class JwtProcessTokenFilter extends OncePerRequestFilter {
 
+    private final List<String> excludePatterns;
     private final ResolveTokenToAuthentication resolveTokenToAuthentication;
+    private final PathMatcher pathMatcher = new AntPathMatcher();
 
-    JwtProcessTokenFilter(ResolveTokenToAuthentication resolveTokenToAuthentication) {
+    public JwtProcessTokenFilter(ResolveTokenToAuthentication resolveTokenToAuthentication) {
+        this(null, resolveTokenToAuthentication);
+    }
+
+    public JwtProcessTokenFilter(List<String> excludePatterns,
+                          ResolveTokenToAuthentication resolveTokenToAuthentication) {
+        this.excludePatterns = excludePatterns;
         this.resolveTokenToAuthentication = resolveTokenToAuthentication;
     }
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
-        resolveTokenAndSetAuthenticationOnSpringSecurityContext(request);
+        if (requiresAuthentication(request)) {
+            resolveTokenAndSetAuthenticationOnSpringSecurityContext(request);
+        }
 
         // go to the next filter in the filter chain
         filterChain.doFilter(request, response);
+    }
+
+    protected boolean requiresAuthentication(HttpServletRequest request) {
+        var requestURI = request.getRequestURI();
+        return this.excludePatterns == null
+               || this.excludePatterns
+                       .stream()
+                       .noneMatch(pattern -> pathMatcher.match(pattern, requestURI));
     }
 
     private void resolveTokenAndSetAuthenticationOnSpringSecurityContext(@NonNull HttpServletRequest request) {
@@ -40,7 +60,7 @@ public class JwtProcessTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (JwtException ex) {
-            log.error("Error while trying to resolve token", ex);
+            log.error("Error while trying to resolve token for request " + request.getRequestURL().toString(), ex);
             SecurityContextHolder.clearContext();
         }
     }

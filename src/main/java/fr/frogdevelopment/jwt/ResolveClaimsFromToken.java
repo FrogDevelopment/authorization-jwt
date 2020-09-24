@@ -5,6 +5,9 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @see JwtParser#parseClaimsJws(String)
+ */
 public class ResolveClaimsFromToken {
 
     private final String signingKey;
@@ -13,9 +16,6 @@ public class ResolveClaimsFromToken {
         this.signingKey = signingKey;
     }
 
-    /**
-     * @see JwtParser#parseClaimsJws(String)
-     */
     @NotNull
     public Claims call(@NotNull String token) {
         return Jwts.parser()

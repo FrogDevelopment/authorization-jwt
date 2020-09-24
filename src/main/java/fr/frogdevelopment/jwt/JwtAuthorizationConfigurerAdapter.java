@@ -30,7 +30,7 @@ public abstract class JwtAuthorizationConfigurerAdapter extends WebSecurityConfi
         http.exceptionHandling().authenticationEntryPoint(handleAuthenticationException());
 
         // Apply JWT
-        http.addFilterBefore(jwtProcessTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(jwtProcessTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         // Entry points
         http.authorizeRequests()
