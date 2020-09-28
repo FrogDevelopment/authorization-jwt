@@ -1,4 +1,4 @@
-package fr.frogdevelopment.jwt.test.context.support;
+package com.frogdevelopment.jwt.test.context.support;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

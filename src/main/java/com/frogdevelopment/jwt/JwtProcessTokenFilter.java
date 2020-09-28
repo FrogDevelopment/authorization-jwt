@@ -1,4 +1,4 @@
-package fr.frogdevelopment.jwt;
+package com.frogdevelopment.jwt;
 
 import io.jsonwebtoken.JwtException;
 import java.io.IOException;
@@ -34,6 +34,7 @@ public class JwtProcessTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
+        log.info("Processing {}", request.getRequestURI());
         if (requiresAuthentication(request)) {
             resolveTokenAndSetAuthenticationOnSpringSecurityContext(request);
         }
@@ -53,7 +54,7 @@ public class JwtProcessTokenFilter extends OncePerRequestFilter {
     private void resolveTokenAndSetAuthenticationOnSpringSecurityContext(@NonNull HttpServletRequest request) {
         try {
             log.debug("Resolve token and set authentication on Spring Security Context for request {}",
-                    request.getRequestURL());
+                    request.getRequestURI());
             var authentication = resolveTokenToAuthentication.call(request);
 
             if (authentication != null) {

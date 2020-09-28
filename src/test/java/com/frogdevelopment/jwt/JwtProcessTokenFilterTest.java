@@ -1,4 +1,4 @@
-package fr.frogdevelopment.jwt;
+package com.frogdevelopment.jwt;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;

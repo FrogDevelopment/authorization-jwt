@@ -1,4 +1,4 @@
-package fr.frogdevelopment.jwt;
+package com.frogdevelopment.jwt;
 
 import javax.servlet.http.HttpServletRequest;
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package fr.frogdevelopment.jwt;
+package com.frogdevelopment.jwt;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
@@ -41,7 +41,7 @@ public abstract class JwtAuthorizationConfigurerAdapter extends WebSecurityConfi
     @NotNull
     private AuthenticationEntryPoint handleAuthenticationException() {
         return (req, rsp, e) -> {
-            log.error("Authentication error", e);
+            log.error("Authentication error for [" + req.getRequestURI() + "]", e);
             rsp.sendError(FORBIDDEN.value(), e.getMessage());
         };
     }

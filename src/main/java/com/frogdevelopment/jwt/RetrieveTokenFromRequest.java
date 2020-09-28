@@ -1,4 +1,4 @@
-package fr.frogdevelopment.jwt;
+package com.frogdevelopment.jwt;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 

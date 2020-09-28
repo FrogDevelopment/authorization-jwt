@@ -1,8 +1,8 @@
-package fr.frogdevelopment.jwt.test.context.support;
+package com.frogdevelopment.jwt.test.context.support;
 
-import static fr.frogdevelopment.jwt.JwtAuthenticationToken.AUTHORITIES_KEY;
+import static com.frogdevelopment.jwt.JwtAuthenticationToken.AUTHORITIES_KEY;
 
-import fr.frogdevelopment.jwt.JwtAuthenticationToken;
+import com.frogdevelopment.jwt.JwtAuthenticationToken;
 import io.jsonwebtoken.impl.DefaultClaims;
 import java.util.ArrayList;
 import org.springframework.security.core.context.SecurityContext;
