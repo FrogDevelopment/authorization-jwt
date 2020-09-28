@@ -31,13 +31,13 @@ public class JwtAuthenticationToken implements Authentication {
     @Setter
     private boolean authenticated;
     @Getter
-    private String tokenString;
+    private final String tokenString;
 
+    @SuppressWarnings("unchecked")
     public JwtAuthenticationToken(Claims claims, String token) {
         this.tokenString = token;
         this.principal = claims.getSubject();
         this.name = claims.getSubject();
-        //noinspection unchecked
         this.authorities = ((List<String>) claims.getOrDefault(AUTHORITIES_KEY, emptyList()))
                 .stream()
                 .map(SimpleGrantedAuthority::new)
@@ -47,6 +47,10 @@ public class JwtAuthenticationToken implements Authentication {
                 .filter(entry -> !AUTHORITIES_KEY.equals(entry.getKey()))
                 .collect(toUnmodifiableMap(Entry::getKey, Entry::getValue));
         this.authenticated = true;
+    }
+
+    public boolean hasDetail(String key) {
+        return details.containsKey(key);
     }
 
     public Object getDetail(String key) {
