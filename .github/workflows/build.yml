@@ -7,7 +7,7 @@ on:
     tags-ignore:
       - '**'
     paths-ignore:
-      - '**/jitpack.yml'
+      - 'jitpack.yml'
 
 jobs:
   build:
