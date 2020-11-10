@@ -14,9 +14,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - run: git fetch --tag
-      - run: git tag
+        with:
+          fetch-depth: 2
+      - run: git checkout HEAD^
 
       - name: Setup Java 14
         uses: joschi/setup-jdk@v2
