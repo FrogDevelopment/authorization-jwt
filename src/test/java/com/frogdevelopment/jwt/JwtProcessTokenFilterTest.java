@@ -66,6 +66,7 @@ class JwtProcessTokenFilterTest {
     @Test
     void shouldClearSecurityContextWhenJwtExceptionIsRaised() throws ServletException, IOException {
         // given
+        given(request.getRequestURL()).willReturn(new StringBuffer("http://local_test/my_uri"));
         givenAnExceptionWhenResolvingToken();
 
         // when
