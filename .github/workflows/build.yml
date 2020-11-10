@@ -15,6 +15,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Checkout with tag
+        run: git checkout "${GITHUB_REF:11}"
+
       - name: Setup Java 14
         uses: joschi/setup-jdk@v2
         with:
