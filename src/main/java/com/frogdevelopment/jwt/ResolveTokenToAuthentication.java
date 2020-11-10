@@ -1,18 +1,18 @@
-package fr.frogdevelopment.jwt;
+package com.frogdevelopment.jwt;
 
 import javax.servlet.http.HttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-class ResolveTokenToAuthentication {
+public class ResolveTokenToAuthentication {
 
-    private final ResolveClaimsFromToken resolveClaimsFromToken;
     private final RetrieveTokenFromRequest retrieveTokenFromRequest;
+    private final TokenToAuthentication tokenToAuthentication;
 
-    ResolveTokenToAuthentication(ResolveClaimsFromToken resolveClaimsFromToken,
-                                 RetrieveTokenFromRequest retrieveTokenFromRequest) {
-        this.resolveClaimsFromToken = resolveClaimsFromToken;
+    public ResolveTokenToAuthentication(RetrieveTokenFromRequest retrieveTokenFromRequest,
+                                 TokenToAuthentication tokenToAuthentication) {
         this.retrieveTokenFromRequest = retrieveTokenFromRequest;
+        this.tokenToAuthentication = tokenToAuthentication;
     }
 
     @Nullable
@@ -22,9 +22,7 @@ class ResolveTokenToAuthentication {
             return null;
         }
 
-        var claims = resolveClaimsFromToken.call(token);
-
-        return new JwtAuthenticationToken(claims);
+        return tokenToAuthentication.call(token);
     }
 
 }

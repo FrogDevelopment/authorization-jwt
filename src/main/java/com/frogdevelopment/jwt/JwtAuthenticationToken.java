@@ -1,4 +1,4 @@
-package fr.frogdevelopment.jwt;
+package com.frogdevelopment.jwt;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toUnmodifiableList;
@@ -30,11 +30,14 @@ public class JwtAuthenticationToken implements Authentication {
     @Getter
     @Setter
     private boolean authenticated;
+    @Getter
+    private final String tokenString;
 
-    public JwtAuthenticationToken(Claims claims) {
+    @SuppressWarnings("unchecked")
+    public JwtAuthenticationToken(Claims claims, String token) {
+        this.tokenString = token;
         this.principal = claims.getSubject();
         this.name = claims.getSubject();
-        //noinspection unchecked
         this.authorities = ((List<String>) claims.getOrDefault(AUTHORITIES_KEY, emptyList()))
                 .stream()
                 .map(SimpleGrantedAuthority::new)
@@ -44,6 +47,10 @@ public class JwtAuthenticationToken implements Authentication {
                 .filter(entry -> !AUTHORITIES_KEY.equals(entry.getKey()))
                 .collect(toUnmodifiableMap(Entry::getKey, Entry::getValue));
         this.authenticated = true;
+    }
+
+    public boolean hasDetail(String key) {
+        return details.containsKey(key);
     }
 
     public Object getDetail(String key) {

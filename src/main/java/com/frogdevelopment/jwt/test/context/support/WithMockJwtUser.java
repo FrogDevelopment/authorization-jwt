@@ -1,4 +1,4 @@
-package fr.frogdevelopment.jwt.test.context.support;
+package com.frogdevelopment.jwt.test.context.support;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -20,6 +20,8 @@ public @interface WithMockJwtUser {
     String username() default "user";
 
     String[] roles() default { "USER" };
+
+    String token() default "";
 
     Claim[] claims() default {};
 

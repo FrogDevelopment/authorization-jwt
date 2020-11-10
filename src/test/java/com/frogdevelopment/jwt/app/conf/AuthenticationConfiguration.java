@@ -1,6 +1,6 @@
-package fr.frogdevelopment.jwt.app.conf;
+package com.frogdevelopment.jwt.app.conf;
 
-import fr.frogdevelopment.jwt.JwtAuthorizationConfigurerAdapter;
+import com.frogdevelopment.jwt.JwtAuthorizationConfigurerAdapter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
@@ -8,4 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @EnableWebSecurity
 public class AuthenticationConfiguration extends JwtAuthorizationConfigurerAdapter {
 
+    public AuthenticationConfiguration() {
+        super(jwtProcessTokenFilter);
+    }
 }

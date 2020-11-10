@@ -1,6 +1,6 @@
-package fr.frogdevelopment.jwt;
+package com.frogdevelopment.jwt;
 
-import static fr.frogdevelopment.jwt.JwtAuthenticationToken.AUTHORITIES_KEY;
+import static com.frogdevelopment.jwt.JwtAuthenticationToken.AUTHORITIES_KEY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;

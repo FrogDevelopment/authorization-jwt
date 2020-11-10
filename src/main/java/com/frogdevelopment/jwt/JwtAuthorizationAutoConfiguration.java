@@ -1,10 +1,12 @@
-package fr.frogdevelopment.jwt;
+package com.frogdevelopment.jwt;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@ConditionalOnProperty("security.jwt.token.signing-key")
 public class JwtAuthorizationAutoConfiguration {
 
     private final String signingKey;
@@ -24,12 +26,11 @@ public class JwtAuthorizationAutoConfiguration {
     }
 
     @Bean
-    ResolveTokenToAuthentication resolveTokenToAuthentication() {
-        return new ResolveTokenToAuthentication(resolveClaimsFromToken(), retrieveTokenFromRequest());
+    TokenToAuthentication tokenToAuthentication() {
+        return new TokenToAuthentication(resolveClaimsFromToken());
     }
-
     @Bean
-    JwtProcessTokenFilter jwtProcessTokenFilter() {
-        return new JwtProcessTokenFilter(resolveTokenToAuthentication());
+    ResolveTokenToAuthentication resolveTokenToAuthentication() {
+        return new ResolveTokenToAuthentication(retrieveTokenFromRequest(), tokenToAuthentication());
     }
 }
