@@ -13,7 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout with all branches and tags
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
@@ -22,17 +23,14 @@ jobs:
         with:
           java-version: '14'
 
-      - name: Test version
-        run: ./gradlew version
+      - name: Compile
+        run: ./gradlew classes
 
-#      - name: Compile
-#        run: ./gradlew classes
-#
-#      - name: Test
-#        run: ./gradlew test
-#
-#      - name: Analyse
-#        if: github.ref == 'refs/heads/master'
-#        run: ./gradlew version sonarqube -Dsonar.login=${{ secrets.SONAR_LOGIN }} -Djgitver.branch=${GITHUB_REF:11}
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Test
+        run: ./gradlew test
+
+      - name: Analyse
+        if: github.ref == 'refs/heads/master'
+        run: ./gradlew version sonarqube -Dsonar.login=${{ secrets.SONAR_LOGIN }} -Djgitver.branch=${GITHUB_REF:11}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
