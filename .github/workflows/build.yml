@@ -15,19 +15,25 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - run: git fetch --tag
+      - run: git tag
+
       - name: Setup Java 14
         uses: joschi/setup-jdk@v2
         with:
           java-version: '14'
 
-      - name: Compile
-        run: ./gradlew classes
+      - name: Test version
+        run: ./gradlew version
 
-      - name: Test
-        run: ./gradlew test
-
-      - name: Analyse
-        if: github.ref == 'refs/heads/master'
-        run: ./gradlew version sonarqube -Dsonar.login=${{ secrets.SONAR_LOGIN }} -Djgitver.branch=${GITHUB_REF:11}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Compile
+#        run: ./gradlew classes
+#
+#      - name: Test
+#        run: ./gradlew test
+#
+#      - name: Analyse
+#        if: github.ref == 'refs/heads/master'
+#        run: ./gradlew version sonarqube -Dsonar.login=${{ secrets.SONAR_LOGIN }} -Djgitver.branch=${GITHUB_REF:11}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
