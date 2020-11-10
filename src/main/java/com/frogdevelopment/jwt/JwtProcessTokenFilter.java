@@ -61,7 +61,7 @@ public class JwtProcessTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (JwtException ex) {
-            log.error("Error while trying to resolve token for request " + request.getRequestURL().toString(), ex);
+            log.error("Unable to resolve token for request [{}], got message: {}", request.getRequestURL().toString(), ex.getMessage());
             SecurityContextHolder.clearContext();
         }
     }
