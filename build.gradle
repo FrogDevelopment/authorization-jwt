@@ -1,7 +1,7 @@
 plugins {
     id 'jacoco'
     id 'java-library'
-    id 'maven'
+    id 'maven-publish'
     id 'org.sonarqube' version '3.0'
     id 'io.freefair.lombok' version '5.3.0'
     id 'fr.brouillard.oss.gradle.jgitver' version '0.9.1'
@@ -99,16 +99,34 @@ artifacts {
 }
 
 // To specify a license in the pom:
-install {
-    repositories.mavenInstaller {
-        pom.project {
-            licenses {
-                license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution 'repo'
-                }
+//install {
+//    repositories.mavenInstaller {
+//        pom.project {
+//            licenses {
+//                license {
+//                    name 'The Apache Software License, Version 2.0'
+//                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//                    distribution 'repo'
+//                }
+//            }
+//        }
+//    }
+//}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/frogdevelopment/authorization-jwt-module")
+            credentials {
+                username = System.getenv("USERNAME")
+                password = System.getenv("GITHUB_TOKEN")
             }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
         }
     }
 }
