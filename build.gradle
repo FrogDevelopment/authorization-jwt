@@ -10,10 +10,9 @@ plugins {
 }
 
 group = 'com.frog-development'
-description = 'authorization-jwt-module'
 
-sourceCompatibility = JavaVersion.VERSION_12
-targetCompatibility = JavaVersion.VERSION_12
+sourceCompatibility = JavaVersion.VERSION_14
+targetCompatibility = JavaVersion.VERSION_14
 
 repositories {
     jcenter()
@@ -83,37 +82,41 @@ sonarqube {
 
 project.tasks['sonarqube'].dependsOn 'jacocoTestReport'
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    from sourceSets.main.allSource
-    classifier 'sources'
+jar {
+    enabled true
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    from javadoc.destinationDir
-    classifier 'javadoc'
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
-
-// To specify a license in the pom:
-//install {
-//    repositories.mavenInstaller {
-//        pom.project {
-//            licenses {
-//                license {
-//                    name 'The Apache Software License, Version 2.0'
-//                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//                    distribution 'repo'
-//                }
-//            }
-//        }
-//    }
-//}
 
 publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            pom {
+                name = 'Authorisation JWT'
+                description = 'Handle Spring Security with JWT'
+//                url = 'http://www.frogdevelopment.com/library'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'legall.benoit'
+                        name = 'Benoît Le Gall'
+                        email = 'legall.benoit@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+
     repositories {
         maven {
             name = "GitHubPackages"
@@ -124,15 +127,12 @@ publishing {
             }
         }
     }
-    publications {
-        gpr(MavenPublication) {
-            from(components.java)
-        }
-    }
 }
 
-jar {
-    enabled true
+tasks.withType(AbstractPublishToMaven) {
+    doFirst {
+        println("Publishing ${publication.groupId}:${publication.artifactId}:${publication.version}")
+    }
 }
 
 wrapper {
