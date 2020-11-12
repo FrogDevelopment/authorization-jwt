@@ -3,11 +3,9 @@ name: Java CI
 on:
   push:
     branches:
-      - 'master'
+      - '**'
     tags-ignore:
       - '**'
-    paths-ignore:
-      - 'jitpack.yml'
 
 jobs:
   build:
@@ -30,6 +28,12 @@ jobs:
 
       - name: Test
         run: ./gradlew test
+
+      - name: Publish
+        run: ./gradlew publish
+        env:
+          USERNAME: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Analyse
         if: github.ref == 'refs/heads/master'
