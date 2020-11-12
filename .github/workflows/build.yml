@@ -36,8 +36,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Analyse
-        if: github.ref == 'refs/heads/master'
-        run: ./gradlew version sonarqube -Dsonar.login=${{ secrets.SONAR_LOGIN }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Analyse
+#        if: github.ref == 'refs/heads/master'
+#        run: ./gradlew version sonarqube -Dsonar.login=${{ secrets.SONAR_LOGIN }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
