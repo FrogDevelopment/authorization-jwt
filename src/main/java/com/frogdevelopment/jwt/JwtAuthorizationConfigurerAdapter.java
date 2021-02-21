@@ -19,7 +19,7 @@ public abstract class JwtAuthorizationConfigurerAdapter extends WebSecurityConfi
     private JwtProcessTokenFilter jwtProcessTokenFilter;
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(final HttpSecurity http) throws Exception {
         // Disable CSRF (cross site request forgery)
         http.csrf().disable();
 

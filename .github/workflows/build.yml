@@ -18,10 +18,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Java 14
+      - name: Setup Java 15
         uses: joschi/setup-jdk@v2
         with:
-          java-version: '14'
+          java-version: '15'
 
       - name: Compile
         run: ./gradlew classes

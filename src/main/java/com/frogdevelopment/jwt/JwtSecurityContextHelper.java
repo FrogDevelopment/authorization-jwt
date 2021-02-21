@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class JwtSecurityContextHelper {
 
     public static JwtAuthenticationToken getJwtAuthenticationToken() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        final var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             throw new AuthenticationCredentialsNotFoundException("Not AuthenticationToken in the SecurityContext");
         }

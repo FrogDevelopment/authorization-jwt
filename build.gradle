@@ -11,8 +11,8 @@ plugins {
 
 group = 'com.frog-development'
 
-sourceCompatibility = JavaVersion.VERSION_14
-targetCompatibility = JavaVersion.VERSION_14
+sourceCompatibility = JavaVersion.VERSION_15
+targetCompatibility = JavaVersion.VERSION_15
 
 repositories {
     jcenter()
@@ -20,7 +20,7 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Hoxton.SR11'
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2020.0.1'
     }
 }
 
@@ -87,13 +87,12 @@ jar {
 }
 
 java {
-    withJavadocJar()
     withSourcesJar()
 }
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        maven(MavenPublication) {
             from components.java
 
             pom {
@@ -136,6 +135,6 @@ tasks.withType(AbstractPublishToMaven) {
 }
 
 wrapper {
-    gradleVersion = '6.7'
+    gradleVersion = '6.8.2'
     distributionType = Wrapper.DistributionType.ALL
 }

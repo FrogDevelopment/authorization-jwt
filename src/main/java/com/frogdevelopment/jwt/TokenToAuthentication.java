@@ -7,13 +7,13 @@ public class TokenToAuthentication {
 
     private final ResolveClaimsFromToken resolveClaimsFromToken;
 
-    public TokenToAuthentication(ResolveClaimsFromToken resolveClaimsFromToken) {
+    public TokenToAuthentication(final ResolveClaimsFromToken resolveClaimsFromToken) {
         this.resolveClaimsFromToken = resolveClaimsFromToken;
     }
 
     @Nullable
-    public JwtAuthenticationToken call(@NotNull String token) {
-        var claims = resolveClaimsFromToken.call(token);
+    public JwtAuthenticationToken call(@NotNull final String token) {
+        final var claims = resolveClaimsFromToken.call(token);
 
         return new JwtAuthenticationToken(claims, token);
     }

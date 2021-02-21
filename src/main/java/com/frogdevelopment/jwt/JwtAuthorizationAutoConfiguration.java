@@ -11,7 +11,7 @@ public class JwtAuthorizationAutoConfiguration {
 
     private final String signingKey;
 
-    public JwtAuthorizationAutoConfiguration(@Value("${security.jwt.token.signing-key}") String signingKey) {
+    public JwtAuthorizationAutoConfiguration(@Value("${security.jwt.token.signing-key}") final String signingKey) {
         this.signingKey = signingKey;
     }
 
@@ -29,6 +29,7 @@ public class JwtAuthorizationAutoConfiguration {
     TokenToAuthentication tokenToAuthentication() {
         return new TokenToAuthentication(resolveClaimsFromToken());
     }
+
     @Bean
     ResolveTokenToAuthentication resolveTokenToAuthentication() {
         return new ResolveTokenToAuthentication(retrieveTokenFromRequest(), tokenToAuthentication());

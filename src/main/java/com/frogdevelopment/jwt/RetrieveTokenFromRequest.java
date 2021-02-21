@@ -11,8 +11,8 @@ public class RetrieveTokenFromRequest {
     public static final String TOKEN_TYPE = "Bearer ";
 
     @Nullable
-    public String call(@NotNull HttpServletRequest request) {
-        var bearer = request.getHeader(AUTHORIZATION);
+    public String call(@NotNull final HttpServletRequest request) {
+        final var bearer = request.getHeader(AUTHORIZATION);
         if (bearer == null || !bearer.startsWith(TOKEN_TYPE)) {
             return null;
         }

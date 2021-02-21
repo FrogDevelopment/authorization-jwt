@@ -12,12 +12,12 @@ public class ResolveClaimsFromToken {
 
     private final String signingKey;
 
-    ResolveClaimsFromToken(String signingKey) {
+    ResolveClaimsFromToken(final String signingKey) {
         this.signingKey = signingKey;
     }
 
     @NotNull
-    public Claims call(@NotNull String token) {
+    public Claims call(@NotNull final String token) {
         return Jwts.parser()
                 .setAllowedClockSkewSeconds(5)
                 .setSigningKey(signingKey.getBytes())
