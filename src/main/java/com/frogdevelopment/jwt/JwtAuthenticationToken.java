@@ -34,7 +34,7 @@ public class JwtAuthenticationToken implements Authentication {
     private final String tokenString;
 
     @SuppressWarnings("unchecked")
-    public JwtAuthenticationToken(Claims claims, String token) {
+    public JwtAuthenticationToken(final Claims claims, final String token) {
         this.tokenString = token;
         this.principal = claims.getSubject();
         this.name = claims.getSubject();
@@ -49,11 +49,11 @@ public class JwtAuthenticationToken implements Authentication {
         this.authenticated = true;
     }
 
-    public boolean hasDetail(String key) {
+    public boolean hasDetail(final String key) {
         return details.containsKey(key);
     }
 
-    public Object getDetail(String key) {
+    public Object getDetail(final String key) {
         return details.get(key);
     }
 

@@ -17,7 +17,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 @RunWith(JUnitPlatform.class)
 class RetrieveTokenFromRequestTest {
 
-    private RetrieveTokenFromRequest retrieveTokenFromRequest = new RetrieveTokenFromRequest();
+    private final RetrieveTokenFromRequest retrieveTokenFromRequest = new RetrieveTokenFromRequest();
 
     @Test
     void should_return_null_when_missing_authorization() {
