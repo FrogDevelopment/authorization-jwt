@@ -15,12 +15,12 @@ sourceCompatibility = JavaVersion.VERSION_15
 targetCompatibility = JavaVersion.VERSION_15
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencyManagement {
     imports {
-        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2020.0.1'
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2020.0.2'
     }
 }
 
@@ -102,7 +102,7 @@ publishing {
                 licenses {
                     license {
                         name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
                     }
                 }
                 developers {
@@ -135,6 +135,6 @@ tasks.withType(AbstractPublishToMaven) {
 }
 
 wrapper {
-    gradleVersion = '6.8.2'
+    gradleVersion = '7.0.2'
     distributionType = Wrapper.DistributionType.ALL
 }
