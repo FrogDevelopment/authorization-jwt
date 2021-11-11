@@ -3,7 +3,7 @@ plugins {
     `java-library`
     `maven-publish`
     id ("org.sonarqube") version "3.3"
-    id("io.freefair.lombok") version "6.2.0"
+    id("io.freefair.lombok") version "6.3.0"
 }
 
 group = "com.frog-development"
