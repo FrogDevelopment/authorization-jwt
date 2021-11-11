@@ -4,6 +4,7 @@ plugins {
     `maven-publish`
     id ("org.sonarqube") version "3.3"
     id("io.freefair.lombok") version "6.2.0"
+    id ("fr.brouillard.oss.gradle.jgitver") version "0.9.1"
 }
 
 group = "com.frog-development"
@@ -110,4 +111,10 @@ publishing {
 tasks.wrapper {
     gradleVersion = "7.2"
     distributionType = Wrapper.DistributionType.ALL
+}
+
+jgitver {
+    strategy("PATTERN")
+    versionPattern("\${v}-SNAPSHOT")
+    tagVersionPattern("\${v}")
 }
