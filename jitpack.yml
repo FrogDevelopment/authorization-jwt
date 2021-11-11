@@ -1,8 +1,5 @@
 before_install:
   - source "$HOME/.sdkman/bin/sdkman-init.sh"
   - sdk update
-  - sdk install java 15.0.2.hs-adpt
-  - sdk use java 15.0.2.hs-adpt
-install:
-  - echo "Running a custom install command"
-  - ./gradlew clean -xtest version jar publishToMavenLocal
+  - sdk install java 11.0.11.hs-adpt
+  - sdk use java 11.0.11.hs-adpt

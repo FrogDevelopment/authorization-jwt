@@ -4,52 +4,43 @@ plugins {
     `maven-publish`
     id ("org.sonarqube") version "3.3"
     id("io.freefair.lombok") version "6.2.0"
-    id ("fr.brouillard.oss.gradle.jgitver") version "0.9.1"
-    id("org.springframework.boot") version "2.5.6"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+//    id ("fr.brouillard.oss.gradle.jgitver") version "0.9.1"
 }
 
 group = "com.frog-development"
 
 configure<JavaPluginExtension> {
-    sourceCompatibility = JavaVersion.VERSION_15
-    targetCompatibility = JavaVersion.VERSION_15
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 repositories {
     mavenCentral()
 }
 
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2020.0.4")
-    }
-}
-
 dependencies {
-    val jwtVersion = "0.9.1"
 
-    api("io.jsonwebtoken:jjwt:$jwtVersion")
+    api("io.jsonwebtoken:jjwt:0.9.1")
 
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.boot:spring-boot-actuator-autoconfigure")
+    implementation("org.springframework.boot:spring-boot-starter-security:2.5.6")
+    implementation("org.springframework.boot:spring-boot-actuator-autoconfigure:2.5.6")
     implementation("ch.qos.logback:logback-classic:1.2.6")
     implementation("javax.servlet:javax.servlet-api:4.0.1")
     implementation("javax.xml.bind:jaxb-api:2.3.1")
 
     compileOnly("org.jetbrains:annotations:23.0.0")
-    compileOnly("org.springframework.security:spring-security-test")
+    compileOnly("org.springframework.security:spring-security-test:5.5.3")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.security:spring-security-test")
-    testImplementation("org.junit.platform:junit-platform-runner")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.6")
+    testImplementation("org.springframework.security:spring-security-test:5.5.3")
+    testImplementation("org.junit.platform:junit-platform-runner:1.8.1")
 }
 
-jgitver {
-    strategy("PATTERN")
-    versionPattern("\${v}-SNAPSHOT")
-    tagVersionPattern("\${v}")
-}
+//jgitver {
+//    strategy("PATTERN")
+//    versionPattern("\${v}-SNAPSHOT")
+//    tagVersionPattern("\${v}")
+//}
 
 tasks.named<Test>("test") {
     reports.html.required.set(false)
@@ -92,14 +83,6 @@ sonarqube {
 }
 
 project.tasks["sonarqube"].dependsOn("jacocoTestReport")
-
-tasks.named("bootJar") {
-    enabled = false
-}
-
-tasks.named("jar") {
-    enabled = true
-}
 
 java {
     withSourcesJar()
