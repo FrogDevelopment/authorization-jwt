@@ -9,7 +9,7 @@
 ##### Add the dependency
 ```groovy
 	dependencies {
-	        implementation 'com.frog-development:authorization-jwt-module:1.4.1-SNAPSHOT'
+	        implementation 'com.frog-development:authorization-jwt-module:1.4.1'
 	}
 ```
 ##### Step 3. Use the Authorization Jwt module
