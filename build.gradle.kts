@@ -4,7 +4,6 @@ plugins {
     `maven-publish`
     id ("org.sonarqube") version "3.3"
     id("io.freefair.lombok") version "6.2.0"
-//    id ("fr.brouillard.oss.gradle.jgitver") version "0.9.1"
 }
 
 group = "com.frog-development"
@@ -35,12 +34,6 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test:5.5.3")
     testImplementation("org.junit.platform:junit-platform-runner:1.8.1")
 }
-
-//jgitver {
-//    strategy("PATTERN")
-//    versionPattern("\${v}-SNAPSHOT")
-//    tagVersionPattern("\${v}")
-//}
 
 tasks.named<Test>("test") {
     reports.html.required.set(false)
@@ -96,11 +89,10 @@ publishing {
             pom {
                 name.set("Authorisation JWT")
                 description.set("Handle Spring Security with JWT")
-//                url = "http://www.frogdevelopment.com/library"
                 licenses {
                     license {
                         name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
                     }
                 }
                 developers {
