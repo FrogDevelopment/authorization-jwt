@@ -3,3 +3,6 @@ before_install:
   - sdk update
   - sdk install java 15.0.2.hs-adpt
   - sdk use java 15.0.2.hs-adpt
+install:
+  - echo "Running a custom install command"
+  - ./gradlew clean -xtest version jar publishToMavenLocal
