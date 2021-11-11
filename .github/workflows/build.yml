@@ -29,11 +29,11 @@ jobs:
       - name: Test
         run: ./gradlew test
 
-      - name: Publish
-        run: ./gradlew publishToMavenLocal
-        env:
-          USERNAME: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Publish
+#        run: ./gradlew publishToMavenLocal
+#        env:
+#          USERNAME: ${{ github.actor }}
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Analyse
         if: github.ref == 'refs/heads/master'
