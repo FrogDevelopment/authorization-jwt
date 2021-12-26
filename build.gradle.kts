@@ -33,7 +33,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:2.6.2")
     testImplementation("org.springframework.security:spring-security-test:5.5.3")
-    testImplementation("org.junit.platform:junit-platform-runner:1.8.1")
+    testImplementation("org.junit.platform:junit-platform-runner:1.8.2")
 }
 
 tasks.named<Test>("test") {
