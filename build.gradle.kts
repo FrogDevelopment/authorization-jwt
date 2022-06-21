@@ -29,10 +29,10 @@ dependencies {
     implementation("javax.xml.bind:jaxb-api:2.3.1")
 
     compileOnly("org.jetbrains:annotations:23.0.0")
-    compileOnly("org.springframework.security:spring-security-test:5.6.1")
+    compileOnly("org.springframework.security:spring-security-test:5.7.2")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:2.6.2")
-    testImplementation("org.springframework.security:spring-security-test:5.5.3")
+    testImplementation("org.springframework.security:spring-security-test:5.7.2")
     testImplementation("org.junit.platform:junit-platform-runner:1.8.2")
 }
 
