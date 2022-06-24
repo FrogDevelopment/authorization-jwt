@@ -23,7 +23,7 @@ dependencies {
     api("io.jsonwebtoken:jjwt:0.9.1")
 
     implementation("org.springframework.boot:spring-boot-starter-security:2.6.2")
-    implementation("org.springframework.boot:spring-boot-actuator-autoconfigure:2.6.2")
+    implementation("org.springframework.boot:spring-boot-actuator-autoconfigure:2.7.1")
     implementation("ch.qos.logback:logback-classic:1.2.10")
     implementation("javax.servlet:javax.servlet-api:4.0.1")
     implementation("javax.xml.bind:jaxb-api:2.3.1")
