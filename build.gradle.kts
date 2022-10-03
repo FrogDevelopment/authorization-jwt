@@ -24,7 +24,7 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-security:2.6.2")
     implementation("org.springframework.boot:spring-boot-actuator-autoconfigure:2.6.2")
-    implementation("ch.qos.logback:logback-classic:1.2.10")
+    implementation("ch.qos.logback:logback-classic:1.4.3")
     implementation("javax.servlet:javax.servlet-api:4.0.1")
     implementation("javax.xml.bind:jaxb-api:2.3.1")
 
